@@ -28,7 +28,7 @@ int main(){
             }
         }
         else if(mes==2){
-            if(!(dia<=28||(dia>=29&&(ano%400==0||(ano%4==0&&ano%100!=0))))){
+            if(!(dia<=28||(dia<=29&&(ano%400==0||(ano%4==0&&ano%100!=0))))){
                 printf("Erro, dia invalido\n");
                 return 0;
             }
@@ -114,6 +114,15 @@ int main(){
         printf("> Minuto m2: ");
         scanf("%d", &m2);
 
+        if(h1>=24||h2>=24){
+            printf("Erro, hora inválida\n");
+            return 0;
+        }
+        if(m1>=60||h2>=60){
+            printf("Erro, minuto inválido\n");
+            return 0;
+        }
+
         if(h2<h1||(h2==h1&&m2<m1)){
             h2+=24;
         }
@@ -122,10 +131,6 @@ int main(){
         if(mr<0){
             mr+=60;
             hr-=1;
-        }
-        if(mr>=60){
-            printf("Erro, minutos inseridos de forma errada\n");
-            return 0;
         }
 
         printf(" 1. Padrão\n");
@@ -166,7 +171,7 @@ int main(){
         float temp;
         int op2;
 
-        printf("C > Conversão de temperatura\n");
+        printf("\nC > Conversão de temperatura\n");
         printf("> Temperatura (ºC): ");
         scanf("%f", &temp);
 
@@ -177,19 +182,19 @@ int main(){
         scanf("%d", &op2);
 
         if(op2==1){
-            printf("< %.1fºC <-> %.1fºF", temp, (temp*9/5)+32);
+            printf("< %.1fºC <-> %.1fºF\n", temp, (temp*9/5)+32);
         }
         else if(op2==2){
-            printf("< %.1fºC <-> %.2fK", temp, temp+273.15);
+            printf("< %.1fºC <-> %.2fK\n", temp, temp+273.15);
         }
         else if(op2==3){
-            printf("< %.1fºC <-> %.2fºR", temp, (temp*9/5)+491.67);
+            printf("< %.1fºC <-> %.2fºR\n", temp, (temp*9/5)+491.67);
         }
         else{
             printf("Erro, opção inválida\n");
             return 0;
         }
-        printf("*fim*");
+        printf("*fim*\n");
         return 0;
 
 
@@ -200,7 +205,7 @@ int main(){
         int qtdTijolo;
         int op2;
 
-        printf("D > Cálculo de material\n");
+        printf("\nD > Cálculo de material\n");
         printf("> Altura (m): ");
         scanf("%f", &altura);
         printf("> Comprimento (m): ");
@@ -208,7 +213,7 @@ int main(){
         printf(" 1. 6 furos\n");
         printf(" 2. 8 furos\n");
         printf(" 3. 9 furos\n");
-        printf(">Selecione uma opção:_");
+        printf("> Selecione uma opção:_");
         scanf("%d", &op2);
 
         if(op2==1){
@@ -217,7 +222,7 @@ int main(){
             if(qtdTijolo<(altura*comprimento)/tamTijolo){
                 qtdTijolo++;
             }
-            printf("< Tijolos necessários: %d unidades (R$ %.2f)", qtdTijolo, (float)(qtdTijolo*400)/1000);
+            printf("< Tijolos necessários: %d unidades (R$ %.2f)\n", qtdTijolo, (float)(qtdTijolo*400)/1000);
         }
         else if(op2==2){
             tamTijolo = 0.19*0.19;
@@ -225,7 +230,7 @@ int main(){
             if(qtdTijolo<(altura*comprimento)/tamTijolo){
                 qtdTijolo++;
             }
-            printf("< Tijolos necessários: %d unidades (R$ %.2f)", qtdTijolo, (float)(qtdTijolo*780.50)/1000);
+            printf("< Tijolos necessários: %d unidades (R$ %.2f)\n", qtdTijolo, (float)(qtdTijolo*780.50)/1000);
         }
         else if(op2==3){
             tamTijolo = 0.19*0.29;
@@ -233,13 +238,13 @@ int main(){
             if(qtdTijolo<(altura*comprimento)/tamTijolo){
                 qtdTijolo++;
             }
-            printf("< Tijolos necessários: %d unidades (R$ %.2f)", qtdTijolo, (float)(qtdTijolo*899.99)/1000);
+            printf("< Tijolos necessários: %d unidades (R$ %.2f)\n", qtdTijolo, (float)(qtdTijolo*899.99)/1000);
         }
         else{
             printf("Erro, opção inválida\n");
             return 0;
         }
-        printf("*fim*");
+        printf("*fim*\n");
         return 0;
     }
     else{
