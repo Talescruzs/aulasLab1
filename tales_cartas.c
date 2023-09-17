@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <time.h>
-#include <stdlib.h>
 
 int partida(int estrategia){
     int asEspadas=2, asBastos=1, seteEspadas=0, aleatorio, minhaCarta, fora, i;
@@ -32,20 +31,26 @@ int partida(int estrategia){
     return minhaCarta;
 }
 
-int main(){
-    srand(time(NULL));
-    int jogo, i; 
-    float percentV, percentD, vitoria=0, derrota=0, total=1000000;
-    for(i=0;i<total;i++){
-        jogo = partida(0);
+float simula(int nPartidas, int estrategia){
+    float vitorias=0;
+    int i, jogo;
+    for(i=0;i<nPartidas;i++){
+        jogo = partida(estrategia);
         if(jogo==2){
-            vitoria++;
-        }
-        else{
-            derrota++;
+            vitorias++;
         }
     }
-    percentV=(vitoria/total)*100;
+    return vitorias;
+}
+
+int main(){
+    srand(time(NULL));
+    float percentV1, percentV2, percentD, vitoria=0, derrota=0, total=1000000;
+    
+    vitoria = simula(total, 0);
+    derrota=total-vitoria;
+
+    percentV1=(vitoria/total)*100;
     percentD=(derrota/total)*100;
 
     printf("> Estratégia 1 (sem mudança de carta):\n");
@@ -53,20 +58,15 @@ int main(){
     printf("    Partidas ganhas: %d\n", (int)vitoria);
     printf("    Partidas perdidas: %d\n", (int)derrota);
     printf("    %% de derrotas: %.2f%%\n", percentD);
-    printf("    %% de vitorias: %.2f%%\n", percentV);
+    printf("    %% de vitorias: %.2f%%\n", percentV1);
 
     vitoria=0;
+    derrota=0;
 
-    for(i=0;i<total;i++){
-        jogo = partida(1);
-        if(jogo==2){
-            vitoria++;
-        }
-        else{
-            derrota++;
-        }
-    }
-    percentV=(vitoria/total)*100;
+    vitoria = simula(total, 1);
+    derrota=total-vitoria;
+
+    percentV2=(vitoria/total)*100;
     percentD=(derrota/total)*100;
 
     printf("> Estratégia 2 (com mudança de carta):\n");
@@ -74,7 +74,16 @@ int main(){
     printf("    Partidas ganhas: %d\n", (int)vitoria);
     printf("    Partidas perdidas: %d\n", (int)derrota);
     printf("    %% de derrotas: %.2f%%\n", percentD);
-    printf("    %% de vitorias: %.2f%%\n", percentV);
+    printf("    %% de vitorias: %.2f%%\n", percentV2);
 
+    if(percentV1>percentV2){
+        printf("> Recomendação: Estratégia 1\n");
+    }
+    else if(percentV1<percentV2){
+        printf("> Recomendação: Estratégia 2\n");
+    }
+    else{
+        printf("> Recomendação: Indiferente\n");
+    }
     return 0;
 }
