@@ -14,11 +14,11 @@ O output do programa tem resultados similares à estes: (similares, pois existe 
 > Recomendação: Estratégia 2
 
 Comentário:
-Os resultados me surpreenderam em partes. Já havia ouvido falar neste problema matemático,
-mas fui apresentado de forma que imaginava uma diferença de 33% de vitoria para não trocar a carta e
+Os resultados me surpreenderam em partes. Já havia ouvido falar nesse problema matemático,
+mas fui apresentado de forma que imaginava uma diferença de 33% de vitória para não trocar a carta e
 50% para trocar, pois haviam apenas duas possibilidades(trocar ou não). Mas, modelando o 
-programa, percebi que, com a estratégia de sempre trocar as cartas, só perdiamos quando
-escolhiamos o ás de espadas inicialmente, o que torna uma chance ainda maior ainda de vitoria
-adotando tal estratégia, 66%, como o observado.
-Tambem vale observar que, como foi utilizada a função "srand(time(NULL));" os resultados das partidas 
+programa, percebi que, com a estratégia de sempre trocar as cartas, só perdíamos quando
+escolhemos o ás de espadas inicialmente, o que torna uma chance ainda maior ainda de vitoria
+adotando tal estratégia, 66%, como observado.
+Também vale observar que, como foi utilizada a função "srand(time(NULL));" os resultados das partidas 
 possuem variações, mas mantém o padrão de vitoria maior da estratégia 2, de trocar as cartas.
