@@ -24,14 +24,34 @@ int main(){
     if(DV>9){
         DV=pegaDigito(DV, 1);
     }
-    int nota=0, cargoHoraria=0, cont=0, totalNota=0, totalHora=0;
+    int  cont=0, contPassou, contRodou, contAproveitou;
+    float nota=0, cargoHoraria=0, totalNota=0, totalHora=0, notaPassou=0, notaRodou=0, notaAproveitou=0;
+
+    printf(" Insira os valores:\n");
     while(nota>=0&&cargoHoraria>=0){
         printf("Nota: ");
-        scanf("%d", &nota);
-        printf("Carga: ");
-        scanf("%d", &nota);
+        scanf("%f", &nota);
+        printf("Carga horária: ");
+        scanf("%f", &cargoHoraria);
+        if(nota>=7&&nota<=10){
+            printf("Passou\n");
+            cont++;
+            contPassou++;
+            totalNota+=nota;
+            notaPassou+=nota;
+            totalHora+=cargoHoraria;
+        }
+        else if(nota>10){
+            printf("Valor inválido inserido\n");
+        }
+        else if(nota>=0&&nota<7){
+            cont++;
+            contRodou++;
+            totalNota+=nota;
+            notaRodou+=nota;
+            totalHora+=cargoHoraria;
+        }
     } 
-
 
     while(op!=5){
         printf("Opções de calculo do aluno %d-%d:\n", matricula, DV);
@@ -44,6 +64,7 @@ int main(){
         switch(op){
             case 1:
                 printf(" Média Geral Acumulada (MGA):\n");
+                printf("MGA = %f\n", notaPassou/contPassou);
                 break;
             case 2:
                 printf("1- Média Geral Acumulada (MGA)\n");
