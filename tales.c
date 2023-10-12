@@ -1,160 +1,95 @@
 #include <stdio.h>
+#include <limits.h>
+
+void ordena(int vet[], int tam){
+    int i;
+    for(i=0; i<tam; i++){
+        for(int j=i; j<tam; j++){
+            if (vet[i]>vet[j]){
+                int temp = vet[i];
+                vet[i] = vet[j];
+                vet[j] = temp;
+            }
+        }
+    }
+}
+
+int mediana(int vet[], int tam){
+    int med;
+    if(tam%2==0){
+        med = (int)(vet[(int)tam/2-1]+vet[((int)tam/2)])/2;
+    }
+    else{
+        med = (int)(vet[(int)tam/2]);
+    }
+    return med;
+}
 
 int main(){
-    int t=-1, i, j, k, count=0, flag=0;
-
-    while(t<0){
-        printf("> Digite t: ");
-        scanf("%d", &t);
+    int l=-1, c=-1, i, j;
+    while(l<=0||l>100){
+        printf("Insira as linhas: ");
+        scanf("%d", &l);
+    }
+    while(c<=0||c>100){
+        printf("Insira as colunas: ");
+        scanf("%d", &c);
     }
 
-    float v1[t];
-    printf("> Digite v1: ");
-    for(i=0; i<t; i++){
-        scanf("%f", &v1[i]);
-        for(j=0; j<count; j++){
-            if(v1[i]==v1[j]){
-                i--;
-                flag=1;
-            }
-        }
-        if(flag==0){
-            count++;
-        }
-        else{
-            printf("> Digite outros valores para v1: ");
-            flag=0;
+    int m[l][c], med[l][c];
+    for(i=0; i<l; i++){
+        for(j=0; j<c; j++){
+            printf("Insira %dX%d: ", i, j);
+            scanf("%d", &m[i][j]);
         }
     }
+    printf("\n");
+    for(i=0; i<l; i++){
+        for(j=0; j<c; j++){
+            printf("%d ", m[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    int x, y, count=0, teste;
+    int vet[9];
 
-    float v2[t];
-    count=0;
-    flag=0;
-    printf("> Digite v2: ");
-    for(i=0; i<t; i++){
-        scanf("%f", &v2[i]);
-        for(j=0; j<count; j++){
-            if(v2[i]==v2[j]){
-                i--;
-                flag=1;
+    // scanf("%d %d", &x, &y);
+    for(x=0; x<l; x++){
+        for(y=0; y<c; y++){
+            for(i=x-1; i<=x+1; i++){
+                for(j=y-1; j<=y+1; j++){
+                    if(i>=0 && j>=0 && i<l && j<c){
+                        vet[count]=m[i][j];
+                        count++;
+                    }
+                }
             }
-        }
-        if(flag==0){
-            count++;
-        }
-        else{
-            printf("> Digite outros valores para v2: ");
-            flag=0;
+            printf("Valores para mediana %dX%d:\n", x+1,y+1);
+            for(i=0; i<count; i++){
+                printf("%d ", vet[i]);
+            }
+            printf("\n");
+            ordena(vet, count);
+            printf("Valores para mediana ordenados %dX%d:\n", x+1,y+1);
+            for(i=0; i<count; i++){
+                printf("%d ", vet[i]);
+            }
+            printf("\n");
+            med[x][y] = mediana(vet, count);
+            printf("Mediana da vizinhança %dX%d = %d\n", x+1, y+1, med[x][y]);
+            count=0;
         }
     }
-
-    float n=-1;
-    while(n<0){
-        printf("> Digite n: ");
-        scanf("%f", &n);
-    }
-
-    float v3[t*2];
-    flag=0;
-    j=0;
-    int flag1=0, flag2=0;
-    for(i=0; i<t*2; i++){
-        if(i%2==0){
-            if(flag1==0){
-                v3[i]=v1[j*2];
-                flag1=1;
-            }
-            else{
-                v3[i]=v2[(j*2)+1];
-                flag1=0;
-            }
+    printf("\nMatriz:\n");
+    for(i=0; i<l; i++){
+        for(j=0; j<c; j++){
+            printf("%d ", med[i][j]);
         }
-        else{
-            if(flag2==0){
-                v3[i]=v2[j*2];
-                flag2=1;
-            }
-            else{
-                v3[i]=v1[(j*2)+1];
-                flag2=0;
-                j++;
-            }
-
-        }
-
-    }
-
-    float v4[t*2], somado[t*2];
-    for(i=0, j=(t*2)-1; i<t*2; i++, j--){
-        if((int)v3[j]%2==0){
-            v4[i]=v3[j]+n;
-            somado[i]=n;
-        }
-        else{
-            v4[i]=v3[j]+(n*2);
-            somado[i]=n*2;
-        }
+        printf("\n");
     }
     
-    printf("<v1: |");
-    for(i=0; i<t; i++){
-        printf(" %f |", v1[i]);
-    }
-    printf("\n");
-    printf("<v2: |");
-    for(i=0; i<t; i++){
-        printf(" %f |", v2[i]);
-    }
-    printf("\n");
-    printf("<v3: |");
-    for(i=0; i<t*2; i++){
-        printf(" %f |", v3[i]);
-    }
-    printf("\n");
-    printf("<v4: |");
-    for(i=0; i<t*2; i++){
-        printf(" %f |", v4[i]);
-    }
 
-    float v5[t], v6[t];
-    flag1=0, flag2=0;
-    for(i=0, j=t-1, k=t-1; i<t*2; i++){
-        if(i%2==0){
-            if(flag1==0){
-                v5[j]=v4[i]-somado[i];
-                flag1=1;
-                j--;
-            }
-            else{
-                v6[k]=v4[i]-somado[i];
-                flag1=0;
-                k--;
-            }
-        }
-        else{
-            if(flag2==0){
-                v6[k]=v4[i]-somado[i];
-                flag2=1;
-                k--;
-            }
-            else{
-                v5[j]=v4[i]-somado[i];
-                flag2=0;
-                j--;
-            }
-
-        }
-    }
-    printf("\n");
-    printf("<v5: |");
-    for(i=0; i<t; i++){
-        printf(" %f |", v5[i]);
-    }
-    printf("\n");
-    printf("<v6: |");
-    for(i=0; i<t; i++){
-        printf(" %f |", v6[i]);
-    }
 
     return 0;
 }
