@@ -51,7 +51,6 @@ int main (){
   al_register_event_source(event_queue, al_get_mouse_event_source() );
   al_start_timer(timer);
 
-  int pecaClicada=-1;
   while(true){
 
     ALLEGRO_EVENT event;
@@ -61,14 +60,7 @@ int main (){
     }
 
     else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){  
-      int clicando = pecaClicada;
-      pecaClicada = selecionaPeca(event.mouse.x, event.mouse.y, pecas, qtdPecas);
-      if(pecaClicada>=0){
-        pecas[pecaClicada].selecionada = 1;
-      }
-      if(clicando!=pecaClicada && clicando>0){
-        pecas[clicando].selecionada = 0;
-      }
+      selecionaPeca(event.mouse.x, event.mouse.y, pecas, qtdPecas);
       printf("%d, %d\n", event.mouse.x, event.mouse.y);
     }
 
