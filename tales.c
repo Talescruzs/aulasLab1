@@ -1,95 +1,75 @@
 #include <stdio.h>
-#include <limits.h>
 
-void ordena(int vet[], int tam){
-    int i;
-    for(i=0; i<tam; i++){
-        for(int j=i; j<tam; j++){
-            if (vet[i]>vet[j]){
-                int temp = vet[i];
-                vet[i] = vet[j];
-                vet[j] = temp;
+void string_circular(char str[], char dir, int n){
+    int i, j=0, flag=0, count=0;
+    char copiStr[30];
+
+    for(i=0; str[i]!='\0';i++){
+        copiStr[i] = str[i];
+        count++;
+    }
+    while(n>=count){
+        n-=count;
+    }
+
+    for(i=0; copiStr[i]!='\0';i++){
+        if(dir=='e'){
+            if(copiStr[i+n]=='\0'){
+                flag=1;
+            }
+            if(flag==0){
+                str[i] = copiStr[i+n];
+            }
+            else{
+                str[i] = copiStr[j];
+                j++;
+            }
+        }
+        else{
+            if(i-n>=0){
+                flag=1;
+            }
+            if(flag==0){
+                str[i] = copiStr[count-i-1];
+                count--;
+            }
+            else{
+                str[i] = copiStr[i-n];
             }
         }
     }
-}
-
-int mediana(int vet[], int tam){
-    int med;
-    if(tam%2==0){
-        med = (int)(vet[(int)tam/2-1]+vet[((int)tam/2)])/2;
-    }
-    else{
-        med = (int)(vet[(int)tam/2]);
-    }
-    return med;
 }
 
 int main(){
-    int l=-1, c=-1, i, j;
-    while(l<=0||l>100){
-        printf("Insira as linhas: ");
-        scanf("%d", &l);
-    }
-    while(c<=0||c>100){
-        printf("Insira as colunas: ");
-        scanf("%d", &c);
-    }
-
-    int m[l][c], med[l][c];
-    for(i=0; i<l; i++){
-        for(j=0; j<c; j++){
-            printf("Insira %dX%d: ", i, j);
-            scanf("%d", &m[i][j]);
+    char continua='s', dir, str[30];
+    int n;
+    while(continua!='n'){
+        if(continua!='s' && continua!='n'){
+            printf("Opção invalida\n");
         }
-    }
-    printf("\n");
-    for(i=0; i<l; i++){
-        for(j=0; j<c; j++){
-            printf("%d ", m[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    int x, y, count=0, teste;
-    int vet[9];
-
-    // scanf("%d %d", &x, &y);
-    for(x=0; x<l; x++){
-        for(y=0; y<c; y++){
-            for(i=x-1; i<=x+1; i++){
-                for(j=y-1; j<=y+1; j++){
-                    if(i>=0 && j>=0 && i<l && j<c){
-                        vet[count]=m[i][j];
-                        count++;
-                    }
+        else{
+            printf("> String: ");
+            scanf("%s", str);
+            do{
+                printf("> Direção ('d' ou 'e'): ");
+                scanf(" %c", &dir);
+                if(dir!='d'&&dir!='e'){
+                    printf("Opcao invalida, insira novamente a direcao\n");
                 }
-            }
-            printf("Valores para mediana %dX%d:\n", x+1,y+1);
-            for(i=0; i<count; i++){
-                printf("%d ", vet[i]);
-            }
-            printf("\n");
-            ordena(vet, count);
-            printf("Valores para mediana ordenados %dX%d:\n", x+1,y+1);
-            for(i=0; i<count; i++){
-                printf("%d ", vet[i]);
-            }
-            printf("\n");
-            med[x][y] = mediana(vet, count);
-            printf("Mediana da vizinhança %dX%d = %d\n", x+1, y+1, med[x][y]);
-            count=0;
+            }while(dir!='d'&&dir!='e');
+            do{
+                printf("> Deslocamentos (> 0): ");
+                scanf("%d", &n);
+                if(n<=0){
+                    printf("Opcao invalida, o deslocamento deve ser maior que zero\n");
+                }
+            }while(n<=0);
+            string_circular(str, dir, n);
+            printf("< String final: %s\n", str);
         }
+        printf("> Continuar ('s' ou 'n') ? ");
+        scanf(" %c", &continua);
     }
-    printf("\nMatriz:\n");
-    for(i=0; i<l; i++){
-        for(j=0; j<c; j++){
-            printf("%d ", med[i][j]);
-        }
-        printf("\n");
-    }
-    
-
-
+    printf("* fim *\n");
     return 0;
 }
