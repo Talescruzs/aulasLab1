@@ -1,7 +1,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/keyboard.h>
+#include <allegro5/allegro_primitives.h>
+#include <stdio.h>
 
 #include "peca.h"
 
@@ -12,14 +13,14 @@ int main (){
 
   for(int i = 0; i<6; i++){
     for(int j = 0; j<2; j++){
-      struct Peca teste = {140+(i*76), 150+(j*85), 0};
+      struct Peca teste = {140+(i*76), 150+(j*85), 0, 0};
       pecas[pos] = teste;
       pos++;
     }
   }
   for(int i = 0; i<6; i++){
     for(int j = 4; j<6; j++){
-      struct Peca teste = {140+(i*76), 150+(j*85), 1};
+      struct Peca teste = {140+(i*76), 150+(j*85), 1, 0};
       pecas[pos] = teste;
       pos++;
     }
@@ -28,7 +29,7 @@ int main (){
   al_init();
   al_init_font_addon();
   al_init_image_addon();
-  al_install_keyboard();
+  al_install_mouse();
 
   ALLEGRO_DISPLAY * display = al_create_display(726, 806);
   al_set_window_position(display, 100, 100);
@@ -47,19 +48,36 @@ int main (){
   ALLEGRO_EVENT_QUEUE * event_queue = al_create_event_queue();
   al_register_event_source(event_queue, al_get_display_event_source(display));
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
-  al_register_event_source(event_queue, al_get_keyboard_event_source() );
+  al_register_event_source(event_queue, al_get_mouse_event_source() );
   al_start_timer(timer);
 
+  int pecaClicada=-1;
   while(true){
+
     ALLEGRO_EVENT event;
     al_wait_for_event(event_queue, &event);
     if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
       break;
     }
 
+    else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){  
+      int clicando = pecaClicada;
+      pecaClicada = selecionaPeca(event.mouse.x, event.mouse.y, pecas, qtdPecas);
+      if(pecaClicada>=0){
+        pecas[pecaClicada].selecionada = 1;
+      }
+      if(clicando!=pecaClicada && clicando>0){
+        pecas[clicando].selecionada = 0;
+      }
+      printf("%d, %d\n", event.mouse.x, event.mouse.y);
+    }
+
     al_draw_bitmap(bg, 0, 0, 0);
     for(int i=0; i<qtdPecas; i++){
-      if(pecas[i].time==1){
+      if(pecas[i].selecionada==1){
+        al_draw_bitmap(seleciona, pecas[i].posX, pecas[i].posY, 0);
+      }
+      else if(pecas[i].time==1){
         al_draw_bitmap(peca1, pecas[i].posX, pecas[i].posY, 0);
       }
       else{

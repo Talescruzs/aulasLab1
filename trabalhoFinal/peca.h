@@ -4,6 +4,9 @@
 struct Peca{
     int posX, posY;
     int time;
+    int selecionada;
 };
+
+int selecionaPeca(int posx, int posy, struct Peca pecas[], int npecas);
 
 #endif
