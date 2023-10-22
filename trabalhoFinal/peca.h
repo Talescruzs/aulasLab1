@@ -7,6 +7,11 @@ struct Peca{
     int selecionada;
 };
 
-int selecionaPeca(int posx, int posy, struct Peca pecas[], int npecas);
+struct Posicao{
+    int posX, posY, estado;
+};
+
+void selecionaPeca(int posx, int posy, struct Peca pecas[], int npecas);
+void localizaPeca(struct Posicao posicoes[6][6], struct Peca pecas[], int npecas);
 
 #endif

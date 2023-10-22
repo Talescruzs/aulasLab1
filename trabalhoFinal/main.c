@@ -8,8 +8,21 @@
 
 int main (){
   int qtdPecas = 24;
+  int linhas = 6;
+  int colunas = 6;
+
   struct Peca pecas[qtdPecas];
+  struct Posicao posicoes[linhas][colunas];
+
   int i, j, pos=0;
+  
+  for(i=0; i<linhas; i++){
+    for(j=0; j<colunas; j++){
+      struct Posicao posicao = {140+(i*76), 150+(j*85), 0};
+
+      posicoes[i][j] = posicao;
+    }
+  }
 
   for(int i = 0; i<6; i++){
     for(int j = 0; j<2; j++){
@@ -52,6 +65,7 @@ int main (){
   al_start_timer(timer);
 
   while(true){
+    localizaPeca(posicoes, pecas, qtdPecas);
 
     ALLEGRO_EVENT event;
     al_wait_for_event(event_queue, &event);
@@ -76,6 +90,14 @@ int main (){
         al_draw_bitmap(peca2, pecas[i].posX, pecas[i].posY, 0);
       }
     }
+    for(i=0; i<linhas; i++){
+      for(j=0; j<colunas; j++){
+        if(posicoes[i][j].estado==2){
+          al_draw_bitmap(opcao, posicoes[i][j].posX, posicoes[i][j].posY, 0);
+        }
+      }
+    }
+
     al_flip_display();
   }
 
