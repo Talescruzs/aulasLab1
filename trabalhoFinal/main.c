@@ -7,35 +7,23 @@
 #include "peca.h"
 
 int main (){
-  int qtdPecas = 24;
   int linhas = 6;
   int colunas = 6;
+  int rodada=1;
 
-  struct Peca pecas[qtdPecas];
   struct Posicao posicoes[linhas][colunas];
 
   int i, j, pos=0;
   
   for(i=0; i<linhas; i++){
     for(j=0; j<colunas; j++){
-      struct Posicao posicao = {140+(i*76), 150+(j*85), 0};
+    struct Posicao posicao = {140+(i*76), 150+(j*85), 0, 0, 0};
+      if(j<2)
+        posicao.estado=2;
+      else if(j>3)
+        posicao.estado=1;
 
       posicoes[i][j] = posicao;
-    }
-  }
-
-  for(int i = 0; i<6; i++){
-    for(int j = 0; j<2; j++){
-      struct Peca teste = {140+(i*76), 150+(j*85), 0, 0};
-      pecas[pos] = teste;
-      pos++;
-    }
-  }
-  for(int i = 0; i<6; i++){
-    for(int j = 4; j<6; j++){
-      struct Peca teste = {140+(i*76), 150+(j*85), 1, 0};
-      pecas[pos] = teste;
-      pos++;
     }
   }
 
@@ -65,7 +53,7 @@ int main (){
   al_start_timer(timer);
 
   while(true){
-    localizaPeca(posicoes, pecas, qtdPecas);
+    localizaPeca(posicoes);
 
     ALLEGRO_EVENT event;
     al_wait_for_event(event_queue, &event);
@@ -74,26 +62,24 @@ int main (){
     }
 
     else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){  
-      selecionaPeca(event.mouse.x, event.mouse.y, pecas, qtdPecas);
-      printf("%d, %d\n", event.mouse.x, event.mouse.y);
+      selecionaPeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
+      // movePeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
     }
 
     al_draw_bitmap(bg, 0, 0, 0);
-    for(int i=0; i<qtdPecas; i++){
-      if(pecas[i].selecionada==1){
-        al_draw_bitmap(seleciona, pecas[i].posX, pecas[i].posY, 0);
-      }
-      else if(pecas[i].time==1){
-        al_draw_bitmap(peca1, pecas[i].posX, pecas[i].posY, 0);
-      }
-      else{
-        al_draw_bitmap(peca2, pecas[i].posX, pecas[i].posY, 0);
-      }
-    }
     for(i=0; i<linhas; i++){
       for(j=0; j<colunas; j++){
-        if(posicoes[i][j].estado==2){
+        if(posicoes[i][j].estado==1){
+          al_draw_bitmap(peca1, posicoes[i][j].posX, posicoes[i][j].posY, 0);
+        }
+        else if(posicoes[i][j].estado==2){
+          al_draw_bitmap(peca2, posicoes[i][j].posX, posicoes[i][j].posY, 0);
+        }
+        if(posicoes[i][j].opcao==1){
           al_draw_bitmap(opcao, posicoes[i][j].posX, posicoes[i][j].posY, 0);
+        }
+        if(posicoes[i][j].selecionada==1){
+          al_draw_bitmap(seleciona, posicoes[i][j].posX, posicoes[i][j].posY, 0);
         }
       }
     }
