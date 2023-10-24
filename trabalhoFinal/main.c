@@ -63,7 +63,7 @@ int main (){
 
     else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){  
       selecionaPeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
-      // movePeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
+      movePeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
     }
 
     al_draw_bitmap(bg, 0, 0, 0);
