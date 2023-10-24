@@ -40,6 +40,7 @@ int main (){
   ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
 
   ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
+  ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
 
   ALLEGRO_BITMAP * peca1 = al_load_bitmap("./img/peca1.png");
   ALLEGRO_BITMAP * peca2 = al_load_bitmap("./img/peca2.png");
@@ -51,6 +52,21 @@ int main (){
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
   al_register_event_source(event_queue, al_get_mouse_event_source() );
   al_start_timer(timer);
+
+  int inMenu = 1;
+  while(inMenu==1){
+
+    ALLEGRO_EVENT event;
+    al_wait_for_event(event_queue, &event);
+
+    if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){  
+      inMenu = 0;
+    }
+
+    al_draw_bitmap(bgMenu, 0, 0, 0);
+
+    al_flip_display();
+  }
 
   while(true){
     localizaPeca(posicoes);
