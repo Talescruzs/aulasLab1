@@ -1,7 +1,7 @@
 #include "peca.h"
 #include <stdio.h>
 
-void selecionaPeca(int posx, int posy, struct Posicao posicoes[6][6], int * rodada){
+void selecionaPeca(int posx, int posy, struct Posicao posicoes[6][6], int *rodada){
     int flag=0;
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
@@ -41,7 +41,7 @@ void movePeca(int posx, int posy, struct Posicao posicoes[6][6], int*rodada){
                     posicoes[i][j].estado=pecaMov.estado;
                     posicoes[i][j].opcao=0;
                     posicoes[i][j].selecionada=0;
-                    rodada++;
+                    *rodada = *rodada+1;
                     flag=1;
                 }
             }
