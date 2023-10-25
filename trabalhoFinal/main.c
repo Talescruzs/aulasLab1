@@ -41,6 +41,8 @@ int main (){
 
   ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
   ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
+  ALLEGRO_BITMAP * p2p1 = al_load_bitmap("./img/playerXplayer1.jpg");
+  ALLEGRO_BITMAP * p2p2 = al_load_bitmap("./img/playerXplayer2.jpg");
 
   ALLEGRO_BITMAP * peca1 = al_load_bitmap("./img/peca1.png");
   ALLEGRO_BITMAP * peca2 = al_load_bitmap("./img/peca2.png");
@@ -54,16 +56,39 @@ int main (){
   al_start_timer(timer);
 
   int inMenu = 1;
+  int flag=0;
+
+  int menusXpadding=200;
+  int menusYpadding=200;
   while(inMenu==1){
 
     ALLEGRO_EVENT event;
     al_wait_for_event(event_queue, &event);
 
-    if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){  
+    al_draw_bitmap(bgMenu, 0, 0, 0);
+
+    if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+      break;
+    }
+    else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
+      if(event.mouse.x>menusXpadding&&event.mouse.x<menusXpadding+300 &&event.mouse.y>menusYpadding&&event.mouse.y<menusYpadding+150){
+        flag=1;
+      } 
+      else{
+        flag=0;
+      }
+    }
+    else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && flag==1){
       inMenu = 0;
     }
 
-    al_draw_bitmap(bgMenu, 0, 0, 0);
+    if(flag==0){
+      al_draw_bitmap(p2p1, menusXpadding, menusYpadding, 0);
+    }
+    else{
+      al_draw_bitmap(p2p2, menusXpadding, menusYpadding, 0);
+    }
+
 
     al_flip_display();
   }
@@ -99,6 +124,7 @@ int main (){
         }
       }
     }
+
 
     al_flip_display();
   }
