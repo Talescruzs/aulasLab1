@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "peca.h"
+#include "menu.h"
 
 int main (){
   int linhas = 6;
@@ -40,12 +41,6 @@ int main (){
   ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
 
   ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
-  ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
-
-  ALLEGRO_BITMAP * p2p1 = al_load_bitmap("./img/playerXplayer1.jpg");
-  ALLEGRO_BITMAP * p2p2 = al_load_bitmap("./img/playerXplayer2.jpg");
-  ALLEGRO_BITMAP * p2c1 = al_load_bitmap("./img/playerXpc1.jpg");
-  ALLEGRO_BITMAP * p2c2 = al_load_bitmap("./img/playerXpc2.jpg");
 
   ALLEGRO_BITMAP * peca1 = al_load_bitmap("./img/peca1.png");
   ALLEGRO_BITMAP * peca2 = al_load_bitmap("./img/peca2.png");
@@ -58,59 +53,10 @@ int main (){
   al_register_event_source(event_queue, al_get_mouse_event_source() );
   al_start_timer(timer);
 
-  int inMenu = 1;
-  int p2p=0;
-  int p2c=0;
 
-  const int menusXpadding=200;
-  const int menusYpadding=200;
+  int opcaoMenu = menu(display, event_queue);
 
-  while(inMenu==1){
-
-    ALLEGRO_EVENT event;
-    al_wait_for_event(event_queue, &event);
-
-    al_draw_bitmap(bgMenu, 0, 0, 0);
-
-    if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-      break;
-    }
-    else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
-      if(event.mouse.x>menusXpadding&&event.mouse.x<menusXpadding+300 &&event.mouse.y>menusYpadding&&event.mouse.y<menusYpadding+150){
-        p2p=1;
-      } 
-      else{
-        p2p=0;
-      }
-      if(event.mouse.x>menusXpadding&&event.mouse.x<menusXpadding+300 &&event.mouse.y>menusYpadding+200&&event.mouse.y<menusYpadding+350){
-        p2c=1;
-      } 
-      else{
-        p2c=0;
-      }
-    }
-    else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && (p2c==1||p2p==1)){
-      inMenu = 0;
-    }
-
-    if(p2p==0){
-      al_draw_bitmap(p2p1, menusXpadding, menusYpadding, 0);
-    }
-    else{
-      al_draw_bitmap(p2p2, menusXpadding, menusYpadding, 0);
-    }
-    if(p2c==0){
-      al_draw_bitmap(p2c1, menusXpadding, menusYpadding+200, 0);
-    }
-    else{
-      al_draw_bitmap(p2c2, menusXpadding, menusYpadding+200, 0);
-    }
-
-
-    al_flip_display();
-  }
-
-  while(true){
+  while(opcaoMenu==1){
     localizaPeca(posicoes);
 
     ALLEGRO_EVENT event;
@@ -147,11 +93,6 @@ int main (){
   }
 
   al_destroy_bitmap(bg);
-  al_destroy_bitmap(bgMenu);
-  al_destroy_bitmap(p2p1);
-  al_destroy_bitmap(p2p2);
-  al_destroy_bitmap(p2c1);
-  al_destroy_bitmap(p2c2);
   al_destroy_bitmap(peca1);
   al_destroy_bitmap(peca2);
   al_destroy_bitmap(seleciona);

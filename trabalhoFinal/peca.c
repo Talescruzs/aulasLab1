@@ -84,26 +84,57 @@ void opcaoMovimento(struct Posicao posicoes[6][6], int *linha, int *coluna){
     }
 }
 
+void verificaCaminhoDireita(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoDireita){
+    *limpoDireita=1;
+    for(int i=coluna+1; i<6; i++){
+        if(posicoes[i][linha].estado!=0&&posicoes[i][linha].selecionada==0){
+            *limpoDireita=0;
+        }
+    }
+    // if(*limpoDireita==1)
+    // printf("Limpo na direita\n");
+}
+void verificaCaminhoEsquerda(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoEsquerda){
+    *limpoEsquerda=1;
+    for(int i=0; i<coluna; i++){
+        if(posicoes[i][linha].estado!=0&&posicoes[i][linha].selecionada==0){
+            *limpoEsquerda=0;
+        }
+    }
+    // if(*limpoEsquerda==1)
+    // printf("Limpo na esquerda\n");
+}
+void verificaCaminhoBaixo(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoBaixo){
+    *limpoBaixo=1;
+    for(int i=linha+1; i<6; i++){
+        if(posicoes[coluna][i].estado!=0&&posicoes[i][linha].selecionada==0){
+            *limpoBaixo=0;
+        }
+    }
+    // if(*limpoBaixo==1)
+    // printf("Limpo pra baixo\n");
+}
+void verificaCaminhoCima(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoCima){
+    *limpoCima=1;
+    for(int i=0; i<linha; i++){
+        if(posicoes[coluna][i].estado!=0&&posicoes[i][linha].selecionada==0){
+            *limpoCima=0;
+        }
+    }
+    // if(*limpoCima==1)
+    // printf("Limpo pra cima\n");
+}
+
 void direitaSuperior(struct Posicao posicoes[6][6], int linha, int coluna){
     int limpoDireita=0, limpoCima=0;
     int parouDireita=-1, parouCima=-1;
     int flagDireita=0, flagCima=0;
 
     if(linha==1||linha==2){
-        limpoDireita=1;
-        for(int i=coluna+1; i<6; i++){
-            if(posicoes[i][linha].estado!=0&&posicoes[i][linha].selecionada==0){
-                limpoDireita=0;
-            }
-        }
+        verificaCaminhoDireita(posicoes, linha, coluna, &limpoDireita);
     }
     if(coluna==3||coluna==4){
-        limpoCima=1;
-        for(int i=0; i<linha; i++){
-            if(posicoes[coluna][i].estado!=0&&posicoes[i][linha].selecionada==0){
-                limpoCima=0;
-            }
-        }
+        verificaCaminhoCima(posicoes, linha, coluna, &limpoCima);
     }
     if(limpoCima==1){
         for(int i=0; i<6; i++){
@@ -140,11 +171,4 @@ void localizaPeca(struct Posicao posicoes[6][6]){
     if(linha==1||linha==2||coluna==3||coluna==4){
         direitaSuperior(posicoes, linha, coluna);
     }
-  
-    // for(int i=0;i<6;i++){
-    //     for(int j=0; j<6;j++){
-    //         direitaSuperior(posicoes, linha, coluna);
-    //         // posicoes[i][j].opcao=1;
-    //     }
-    // }
 }
