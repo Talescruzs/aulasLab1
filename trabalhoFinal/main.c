@@ -41,6 +41,7 @@ int main (){
 
   ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
   ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
+
   ALLEGRO_BITMAP * p2p1 = al_load_bitmap("./img/playerXplayer1.jpg");
   ALLEGRO_BITMAP * p2p2 = al_load_bitmap("./img/playerXplayer2.jpg");
   ALLEGRO_BITMAP * p2c1 = al_load_bitmap("./img/playerXpc1.jpg");
@@ -61,8 +62,8 @@ int main (){
   int p2p=0;
   int p2c=0;
 
-  int menusXpadding=200;
-  int menusYpadding=200;
+  const int menusXpadding=200;
+  const int menusYpadding=200;
 
   while(inMenu==1){
 
@@ -146,6 +147,11 @@ int main (){
   }
 
   al_destroy_bitmap(bg);
+  al_destroy_bitmap(bgMenu);
+  al_destroy_bitmap(p2p1);
+  al_destroy_bitmap(p2p2);
+  al_destroy_bitmap(p2c1);
+  al_destroy_bitmap(p2c2);
   al_destroy_bitmap(peca1);
   al_destroy_bitmap(peca2);
   al_destroy_bitmap(seleciona);

@@ -59,17 +59,16 @@ void movePeca(int posx, int posy, struct Posicao posicoes[6][6], int*rodada){
     }
 }
 
-void localizaPeca(struct Posicao posicoes[6][6]){
+void opcaoMovimento(struct Posicao posicoes[6][6], int *linha, int *coluna){
     int posx, posy;
-    int linha=-1, coluna=-1;
     int flag=0;
     for(int i=0;i<6;i++){
         for(int j=0; j<6;j++){
             if(posicoes[i][j].selecionada==1){
                 posx = posicoes[i][j].posX;
                 posy = posicoes[i][j].posY;
-                linha=j;
-                coluna=i;
+                *linha=j;
+                *coluna=i;
             }
         }
     }
@@ -78,15 +77,60 @@ void localizaPeca(struct Posicao posicoes[6][6]){
             if((posicoes[i][j].posX==posx+76||posicoes[i][j].posX==posx-76||posicoes[i][j].posX==posx)&&(posicoes[i][j].posY==posy+85||posicoes[i][j].posY==posy-85||posicoes[i][j].posY==posy)&&(posicoes[i][j].posY!=posy||posicoes[i][j].posX!=posx)&&posicoes[i][j].estado==0){
                 posicoes[i][j].opcao=1;
             }
-            else if((coluna==2||coluna==3||linha==2||linha==3)&&(j==2||j==3||i==2||i==3)){
-                posicoes[i][j].opcao=1;
-            }
-            else if((coluna==1||coluna==4||linha==1||linha==4)&&(j==1||j==4||i==1||i==4)){
-                posicoes[i][j].opcao=1;
-            }
             else{
                 posicoes[i][j].opcao=0;
             }
         }
     }
+}
+
+void direitaSuperior(struct Posicao posicoes[6][6], int linha, int coluna){
+    int limpoDireita=1, limpoCima=1;
+    int parouDireita=-1, parouCima=-1;
+    for(int i=coluna+1; i<6; i++){
+        if(posicoes[i][linha].estado!=0){
+            limpoDireita=0;
+        }
+    }
+    for(int i=0; i<linha; i++){
+        if(posicoes[coluna][i].estado!=0){
+            limpoCima=0;
+        }
+    }
+    if(limpoCima==1){
+        for(int i=coluna; i>0; i--){
+            if(posicoes[i][linha].estado!=0){
+                parouDireita=i;
+            }
+        }
+    }
+    if(limpoDireita==1){
+        for(int i=0; i<linha; i++){
+            if(posicoes[coluna][i].estado!=0){
+                limpoCima=0;
+            }
+        }   
+    }
+    
+    
+    if((linha==2||linha==1) && limpoDireita==1 && parouDireita!=-1){
+        posicoes[parouDireita][linha].opcao=1;
+    }
+    if((coluna==3||coluna==4) && limpoCima==1 && parouCima==0){
+        posicoes[i][6-coluna-1].opcao=1;
+    } 
+    
+}
+
+void localizaPeca(struct Posicao posicoes[6][6]){
+    int linha=-1, coluna=-1;
+    opcaoMovimento(posicoes, &linha, &coluna);
+    direitaSuperior(posicoes, linha, coluna);
+
+    // for(int i=0;i<6;i++){
+    //     for(int j=0; j<6;j++){
+    //         direitaSuperior(posicoes, linha, coluna);
+    //         // posicoes[i][j].opcao=1;
+    //     }
+    // }
 }
