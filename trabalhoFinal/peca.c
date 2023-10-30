@@ -205,7 +205,6 @@ void esquerdaSuperior(struct Posicao posicoes[6][6], int linha, int coluna){
         }
     }
 }
-
 void direitaInferior(struct Posicao posicoes[6][6], int linha, int coluna){
     int limpoDireita=0, limpoBaixo=0;
     int colunaOpcao, linhaOpcao;
@@ -246,12 +245,13 @@ void esquerdaInferior(struct Posicao posicoes[6][6], int linha, int coluna){
         }
     }
     if(limpoEsquerda==1){
-        linhaOpcao=varreCimaBaixo(posicoes, 5-linha, posicoes[coluna][linha].estado);
+        linhaOpcao=varreBaixoCima(posicoes, 5-linha, posicoes[coluna][linha].estado);
         if(linhaOpcao>=0&&linhaOpcao<6){
             posicoes[5-linha][linhaOpcao].opcao=1;
         }
     }
 }
+
 
 void localizaPeca(struct Posicao posicoes[6][6]){
     int linha=-1, coluna=-1;
