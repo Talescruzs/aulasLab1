@@ -6,7 +6,6 @@
 
 int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
 
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
 
     ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
     ALLEGRO_BITMAP * p2p1 = al_load_bitmap("./img/playerXplayer1.jpg");
