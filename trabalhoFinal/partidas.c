@@ -6,6 +6,23 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 
+void salvaPartida(struct Posicao posicoes[6][6], int *rodada){
+    FILE *file;
+    file = fopen("save.txt", "w");
+    fprintf(file, "rodada{\n");
+    for(int i=0; i<6; i++){
+        for(int j=0; j<6; j++){
+            fprintf(file, "%dX%d{\n", i, j);
+            fprintf(file, "posx:%d\n", posicoes[i][j].posX);
+            fprintf(file, "posy:%d\n", posicoes[i][j].posY);
+            fprintf(file, "estado:%d\n", posicoes[i][j].estado);
+            fprintf(file, "}\n");
+        }
+    }
+    fprintf(file, "}");
+    fclose(file);
+}
+
 int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6]){
     int linhas = 6;
     int colunas = 6;
@@ -36,14 +53,21 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
             if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475){
                 inMenu=1;
             }
-            else if(inMenu==1 && event.mouse.x<=600){
-                inMenu=0;
+            else if(inMenu==1){
+                if(event.mouse.x<=600){
+                    inMenu=0;
+                }
+                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
+                    salvaPartida(posicoes, &rodada);
+                }
             }
             else if(inMenu==0){
                 selecionaPeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
                 movePeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
             }
         }
+
+        al_clear_to_color(al_map_rgb(255,255,255));
         al_draw_bitmap(bg, 0, 0, 0);
 
         for(i=0; i<linhas; i++){
@@ -73,6 +97,8 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
         if(inMenu==1){
             al_draw_bitmap(cobreFundo, 0, 0, 0);
             al_draw_bitmap(barra, 600, 0, 0);
+            al_draw_bitmap(botao, 625, 200, 0);
+
         }
 
 
@@ -130,6 +156,7 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
             computador(posicoes, &rodada);
         }
 
+        al_clear_to_color(al_map_rgb(255,255,255));
         al_draw_bitmap(bg, 0, 0, 0);
         for(i=0; i<linhas; i++){
             for(j=0; j<colunas; j++){
