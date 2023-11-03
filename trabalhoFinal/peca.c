@@ -82,7 +82,6 @@ void opcaoMovimento(struct Posicao posicoes[6][6], int *linha, int *coluna){
         }
     }
 }
-
 void localizaPeca(struct Posicao posicoes[6][6]){
     int linha=-1, coluna=-1;
     opcaoMovimento(posicoes, &linha, &coluna);
