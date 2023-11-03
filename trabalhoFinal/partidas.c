@@ -26,11 +26,9 @@ void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo){
     fprintf(file, "}");
     fclose(file);
 }
-
-int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6]){
+int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada){
     int linhas = 6;
     int colunas = 6;
-    int rodada=1;
     int i, j;
     int result = 0, qtd1=0, qtd2=0;
     int inMenu=0;
@@ -62,12 +60,12 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
                     inMenu=0;
                 }
                 else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
-                    salvaPartida(posicoes, &rodada, 1);
+                    salvaPartida(posicoes, rodada, 1);
                 }
             }
             else if(inMenu==0){
-                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
-                movePeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
+                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
             }
         }
 
@@ -118,10 +116,9 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
     al_destroy_bitmap(barra);
     return result;
 }
-int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6]){
+int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada){
     int linhas = 6;
     int colunas = 6;
-    int rodada=1;
     int i, j;
     int result = 0, qtd1=0, qtd2=0;
     int inMenu=0;
@@ -153,16 +150,16 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
                     inMenu=0;
                 }
                 else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
-                    salvaPartida(posicoes, &rodada, 2);
+                    salvaPartida(posicoes, rodada, 2);
                 }
             }
-            else if(inMenu==0 && rodada%2==1){
-                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
-                movePeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
+            else if(inMenu==0 && *rodada%2==1){
+                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
             }
         }
-        if(rodada%2==0){
-            computador(posicoes, &rodada);
+        if(*rodada%2==0){
+            computador(posicoes, rodada);
         }
 
         al_clear_to_color(al_map_rgb(255,255,255));
@@ -209,7 +206,6 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
     al_destroy_bitmap(barra);
     return result;
 }
-
 void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo){
     FILE *file;
     file = fopen("save.txt", "r");

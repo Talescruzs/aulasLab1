@@ -54,11 +54,11 @@ int main (){
       opcaoMenu = menu(display, event_queue);
     }
     if(opcaoMenu==1 || tipo==1){
-      continua = PvP(display, event_queue, posicoes);
+      continua = PvP(display, event_queue, posicoes, &rodada);
       tipo=0;
     }
     else if(opcaoMenu==2 || tipo==2){
-      continua = PvPc(display, event_queue, posicoes);
+      continua = PvPc(display, event_queue, posicoes, &rodada);
       tipo=0;
     }
     else if(opcaoMenu==3){
