@@ -250,30 +250,6 @@ void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo){
                 long result = strtol(realDado, &teste, 10);
                 *tipo = (int)result;
             }
-            else if(strcmp(realDado, "posx")==0){
-                for(i=tam+1; tLinha[i]!='\0'; i++){
-                    dado[count]=tLinha[i];
-                    count++;
-                }
-                char realDado[count];
-                for(i=0; i<count; i++){
-                    realDado[i]=dado[i];
-                }
-                long result = strtol(realDado, &teste, 10);
-                posicoes[linha][coluna].posX = (int)result;
-            }
-            else if(strcmp(realDado, "posy")==0){
-                for(i=tam+1; tLinha[i]!='\0'; i++){
-                    dado[count]=tLinha[i];
-                    count++;
-                }
-                char realDado[count];
-                for(i=0; i<count; i++){
-                    realDado[i]=dado[i];
-                }
-                long result = strtol(realDado, &teste, 10);
-                posicoes[linha][coluna].posY = (int)result;
-            }
             else if(strcmp(realDado, "estado")==0){
                 for(i=tam+1; tLinha[i]!='\0'; i++){
                     dado[count]=tLinha[i];
