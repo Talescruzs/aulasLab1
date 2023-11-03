@@ -100,3 +100,7 @@ void localizaPeca(struct Posicao posicoes[6][6]){
     }
 
 }
+
+void computador(struct Posicao posicoes[6][6], int *rodada){
+    *rodada = *rodada+1;
+}

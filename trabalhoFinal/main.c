@@ -54,12 +54,13 @@ int main (){
     if(opcaoMenu==1){
       continua = PvP(display, event_queue, posicoes);
     }
+    else if(opcaoMenu==2){
+      continua = PvPc(display, event_queue, posicoes);
+    }
     else{
       break;
     }
   }
-
-
 
   al_destroy_font(font);
   al_destroy_display(display);

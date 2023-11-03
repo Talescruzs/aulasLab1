@@ -4,7 +4,7 @@
 #include "peca.h"
 
 int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6]);
-// void PvPc();
+int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6]);
 // void Salvo();
 
 #endif
