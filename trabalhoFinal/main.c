@@ -12,6 +12,7 @@ int main (){
   int linhas = 6;
   int colunas = 6;
   int rodada=1;
+  int tipo=0;
 
   struct Posicao posicoes[linhas][colunas];
 
@@ -47,15 +48,21 @@ int main (){
   al_register_event_source(event_queue, al_get_mouse_event_source() );
   al_start_timer(timer);
 
-  int continua=1;
+  int continua=1, opcaoMenu=0;
   while(continua==1){
-    int opcaoMenu = menu(display, event_queue);
-
-    if(opcaoMenu==1){
-      continua = PvP(display, event_queue, posicoes);
+    if(tipo==0){
+      opcaoMenu = menu(display, event_queue);
     }
-    else if(opcaoMenu==2){
+    if(opcaoMenu==1 || tipo==1){
+      continua = PvP(display, event_queue, posicoes);
+      tipo=0;
+    }
+    else if(opcaoMenu==2 || tipo==2){
       continua = PvPc(display, event_queue, posicoes);
+      tipo=0;
+    }
+    else if(opcaoMenu==3){
+      salvo(posicoes, &rodada, &tipo);
     }
     else{
       break;

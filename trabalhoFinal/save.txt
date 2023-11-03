@@ -1,4 +1,6 @@
-rodada{
+partida{
+rodada:2
+tipo:1
 0X0{
 posx:140
 posy:150
@@ -107,12 +109,12 @@ estado:0
 3X3{
 posx:368
 posy:405
-estado:0
+estado:1
 }
 3X4{
 posx:368
 posy:490
-estado:1
+estado:0
 }
 3X5{
 posx:368

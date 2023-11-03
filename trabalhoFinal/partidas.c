@@ -5,11 +5,15 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-void salvaPartida(struct Posicao posicoes[6][6], int *rodada){
+void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo){
     FILE *file;
     file = fopen("save.txt", "w");
-    fprintf(file, "rodada{\n");
+    fprintf(file, "partida{\n");
+    fprintf(file, "rodada:%d\n", *rodada);
+    fprintf(file, "tipo:%d\n", tipo);
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
             fprintf(file, "%dX%d{\n", i, j);
@@ -58,7 +62,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
                     inMenu=0;
                 }
                 else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
-                    salvaPartida(posicoes, &rodada);
+                    salvaPartida(posicoes, &rodada, 1);
                 }
             }
             else if(inMenu==0){
@@ -144,8 +148,13 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
             if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475){
                 inMenu=1;
             }
-            else if(inMenu==1 && event.mouse.x<=600){
-                inMenu=0;
+            else if(inMenu==1){
+                if(event.mouse.x<=600){
+                    inMenu=0;
+                }
+                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
+                    salvaPartida(posicoes, &rodada, 2);
+                }
             }
             else if(inMenu==0 && rodada%2==1){
                 selecionaPeca(event.mouse.x, event.mouse.y, posicoes, &rodada);
@@ -199,4 +208,96 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
     al_destroy_bitmap(botao);
     al_destroy_bitmap(barra);
     return result;
+}
+
+void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo){
+    FILE *file;
+    file = fopen("save.txt", "r");
+
+    char tLinha[100], dado[10], *teste, *palavra;
+    int linha=-1, coluna=-1, i, tam=0, count=0;
+
+    while(fgets(tLinha, 100, file)) {
+        tam=0;
+        count=0;
+        palavra = strchr(tLinha, ':');
+        if(palavra!=NULL){
+            for(i=0; tLinha[i]!=':'; i++){
+                dado[i]=tLinha[i];
+                tam++;
+            }
+            char realDado[tam];
+            for(i=0; i<tam; i++){
+                realDado[i]=dado[i];
+            }
+            if(strcmp(realDado, "rodada")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                *rodada = (int)result;
+            }
+            else if(strcmp(realDado, "tipo")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                *tipo = (int)result;
+            }
+            else if(strcmp(realDado, "posx")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                posicoes[linha][coluna].posX = (int)result;
+            }
+            else if(strcmp(realDado, "posy")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                posicoes[linha][coluna].posY = (int)result;
+            }
+            else if(strcmp(realDado, "estado")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                posicoes[linha][coluna].estado = (int)result;
+            }
+        }
+        palavra = strchr(tLinha, 'X');
+        if(palavra!=NULL){
+            linha = *(palavra-1)-'0';
+            coluna = *(palavra+1)-'0';
+        }
+    }
+
+    // Close the file
+    fclose(file);
 }
