@@ -38,7 +38,9 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
     ALLEGRO_BITMAP * peca2 = al_load_bitmap("./img/peca2.png");
     ALLEGRO_BITMAP * seleciona = al_load_bitmap("./img/seleciona.png");
     ALLEGRO_BITMAP * opcao = al_load_bitmap("./img/opcao.png");
-    ALLEGRO_BITMAP * botao = al_load_bitmap("./img/Salvar1.jpg");
+
+    ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
+    ALLEGRO_BITMAP * botaoMenu1 = al_load_bitmap("./img/voltaMenu1.jpg");
 
     ALLEGRO_BITMAP * barra = al_load_bitmap("./img/barraMenu.jpg");
 
@@ -52,15 +54,19 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
             break;
         }
         else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-            if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475){
+            if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475 && inMenu==0){
                 inMenu=1;
             }
             else if(inMenu==1){
                 if(event.mouse.x<=600){
                     inMenu=0;
                 }
-                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
+                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=100&&event.mouse.y<=250){
                     salvaPartida(posicoes, rodada, 1);
+                }
+                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=300&&event.mouse.y<=450){
+                    result = 1;
+                    break;
                 }
             }
             else if(inMenu==0){
@@ -90,7 +96,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
                 }
             }
         }
-        al_draw_bitmap(botao, 650, 325, 0);
+        al_draw_bitmap(botaoSalva1, 650, 325, 0);
         if(qtd1==0||qtd2==0){
             result = 1;
             break;
@@ -99,7 +105,8 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
         if(inMenu==1){
             al_draw_bitmap(cobreFundo, 0, 0, 0);
             al_draw_bitmap(barra, 600, 0, 0);
-            al_draw_bitmap(botao, 625, 200, 0);
+            al_draw_bitmap(botaoSalva1, 625, 100, 0);
+            al_draw_bitmap(botaoMenu1, 625, 300, 0);
 
         }
 
@@ -112,7 +119,8 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
     al_destroy_bitmap(peca2);
     al_destroy_bitmap(seleciona);
     al_destroy_bitmap(opcao);
-    al_destroy_bitmap(botao);
+    al_destroy_bitmap(botaoSalva1);
+    al_destroy_bitmap(botaoMenu1);
     al_destroy_bitmap(barra);
     return result;
 }
@@ -128,7 +136,9 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
     ALLEGRO_BITMAP * peca2 = al_load_bitmap("./img/peca2.png");
     ALLEGRO_BITMAP * seleciona = al_load_bitmap("./img/seleciona.png");
     ALLEGRO_BITMAP * opcao = al_load_bitmap("./img/opcao.png");
-    ALLEGRO_BITMAP * botao = al_load_bitmap("./img/Salvar1.jpg");
+
+    ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
+    ALLEGRO_BITMAP * botaoMenu1 = al_load_bitmap("./img/voltaMenu1.jpg");
 
     ALLEGRO_BITMAP * barra = al_load_bitmap("./img/barraMenu.jpg");
 
@@ -142,18 +152,22 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
             break;
         }
         else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-            if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475){
+            if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475 && inMenu==0){
                 inMenu=1;
             }
             else if(inMenu==1){
                 if(event.mouse.x<=600){
                     inMenu=0;
                 }
-                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=200&&event.mouse.y<=350){
+                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=100&&event.mouse.y<=250){
                     salvaPartida(posicoes, rodada, 2);
                 }
+                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=300&&event.mouse.y<=450){
+                    result = 1;
+                    break;
+                }
             }
-            else if(inMenu==0 && *rodada%2==1){
+            else if(inMenu==0){
                 selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
                 movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
             }
@@ -182,7 +196,7 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
                 }
             }
         }
-        al_draw_bitmap(botao, 650, 325, 0);
+        al_draw_bitmap(botaoSalva1, 650, 325, 0);
         if(qtd1==0||qtd2==0){
             result = 1;
             break;
@@ -191,6 +205,8 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
         if(inMenu==1){
             al_draw_bitmap(cobreFundo, 0, 0, 0);
             al_draw_bitmap(barra, 600, 0, 0);
+            al_draw_bitmap(botaoSalva1, 625, 100, 0);
+            al_draw_bitmap(botaoMenu1, 625, 300, 0);
         }
 
 
@@ -202,7 +218,8 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
     al_destroy_bitmap(peca2);
     al_destroy_bitmap(seleciona);
     al_destroy_bitmap(opcao);
-    al_destroy_bitmap(botao);
+    al_destroy_bitmap(botaoSalva1);
+    al_destroy_bitmap(botaoMenu1);
     al_destroy_bitmap(barra);
     return result;
 }

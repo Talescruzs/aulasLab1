@@ -18,17 +18,7 @@ int main (){
 
   int i, j, pos=0;
   
-  for(i=0; i<linhas; i++){
-    for(j=0; j<colunas; j++){
-    struct Posicao posicao = {140+(i*76), 150+(j*85), 0, 0, 0};
-      if(j<2)
-        posicao.estado=2;
-      else if(j>3)
-        posicao.estado=1;
-
-      posicoes[i][j] = posicao;
-    }
-  }
+  
 
   al_init();
   al_init_font_addon();
@@ -48,8 +38,22 @@ int main (){
   al_register_event_source(event_queue, al_get_mouse_event_source() );
   al_start_timer(timer);
 
-  int continua=1, opcaoMenu=0;
+  int continua=1, opcaoMenu;
   while(continua==1){
+    opcaoMenu=0;
+    if(tipo==0){
+      for(i=0; i<linhas; i++){
+        for(j=0; j<colunas; j++){
+        struct Posicao posicao = {140+(i*76), 150+(j*85), 0, 0, 0};
+          if(j<2)
+            posicao.estado=2;
+          else if(j>3)
+            posicao.estado=1;
+
+          posicoes[i][j] = posicao;
+        }
+      }
+    }
     if(tipo==0){
       opcaoMenu = menu(display, event_queue);
     }

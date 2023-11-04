@@ -27,6 +27,7 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
 
+        al_clear_to_color(al_map_rgb(255,255,255));
         al_draw_bitmap(bgMenu, 0, 0, 0);
 
         if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
