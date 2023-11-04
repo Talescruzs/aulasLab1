@@ -146,35 +146,39 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
         qtd1=0, qtd2=0;
         localizaPeca(posicoes);
 
-        ALLEGRO_EVENT event;
-        al_wait_for_event(event_queue, &event);
-        if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-            break;
-        }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-            if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475 && inMenu==0){
-                inMenu=1;
-            }
-            else if(inMenu==1){
-                if(event.mouse.x<=600){
-                    inMenu=0;
-                }
-                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=100&&event.mouse.y<=250){
-                    salvaPartida(posicoes, rodada, 2);
-                }
-                else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=300&&event.mouse.y<=450){
-                    result = 1;
-                    break;
-                }
-            }
-            else if(inMenu==0){
-                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
-                movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
-            }
-        }
         if(*rodada%2==0){
             computador(posicoes, rodada);
         }
+        else{
+            ALLEGRO_EVENT event;
+            al_wait_for_event(event_queue, &event);
+            if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+                break;
+            }
+            else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
+                if(event.mouse.x>=650&&event.mouse.y>=325&&event.mouse.y<=475 && inMenu==0){
+                    inMenu=1;
+                }
+                else if(inMenu==1){
+                    if(event.mouse.x<=600){
+                        inMenu=0;
+                    }
+                    else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=100&&event.mouse.y<=250){
+                        salvaPartida(posicoes, rodada, 2);
+                    }
+                    else if(event.mouse.x>=625&&event.mouse.x<=825&&event.mouse.y>=300&&event.mouse.y<=450){
+                        result = 1;
+                        break;
+                    }
+                }
+                else if(inMenu==0){
+                    selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                    movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                }
+            }
+        }
+        
+        
 
         al_clear_to_color(al_map_rgb(255,255,255));
         al_draw_bitmap(bg, 0, 0, 0);

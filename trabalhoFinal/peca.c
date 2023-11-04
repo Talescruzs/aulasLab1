@@ -24,7 +24,7 @@ void selecionaPeca(int posx, int posy, struct Posicao posicoes[6][6], int *rodad
         }
     }
 }
-void movePeca(int posx, int posy, struct Posicao posicoes[6][6], int*rodada){
+void movePeca(int posx, int posy, struct Posicao posicoes[6][6], int *rodada){
     struct Posicao pecaMov;
     int flag=0;
     for(int i=0; i<6; i++){
@@ -101,6 +101,41 @@ void localizaPeca(struct Posicao posicoes[6][6]){
 
 }
 
+int movePecaPC(struct Posicao posicoes[6][6], int *rodada){
+    for(int i=0; i<6; i++){
+        for(int j=0; j<6; j++){
+            if(posicoes[i][j].opcao==1){
+                movePeca(posicoes[i][j].posX, posicoes[i][j].posY, posicoes, rodada);
+                return 1;
+            }
+        }
+    }
+
+    // movePeca(posicoes[i+1][j+1].posX, posicoes[i+1][j+1].posY, posicoes, rodada);
+    return 0;
+}
 void computador(struct Posicao posicoes[6][6], int *rodada){
-    *rodada = *rodada+1;
+    int i, j, a=0;
+    for(i=0; i<6; i++){
+        for(j=0; j<6; j++){
+            if(posicoes[i][j].estado==2){
+                selecionaPeca(posicoes[i][j].posX, posicoes[i][j].posY, posicoes, rodada);
+                a = movePecaPC(posicoes, rodada);
+                localizaPeca(posicoes);
+                printf("%d\n", posicoes[i][j].posX);
+                printf("%d\n", posicoes[i][j].posY);
+                if(a==1){
+                    break;
+                }
+                else{
+                    posicoes[i][j].selecionada=0;
+                }
+            }
+        }
+        if(a==1){
+            break;
+        }
+    }
+
+    // *rodada = *rodada+1;
 }
