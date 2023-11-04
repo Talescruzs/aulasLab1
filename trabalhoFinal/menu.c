@@ -19,8 +19,8 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     int p2c=0;
     int salvo=0;
 
-    const int menusXpadding=200;
-    const int menusYpadding=200;
+    const int menusXpos=275;
+    const int menusYpos=200;
 
     while(inMenu==1){
 
@@ -34,19 +34,19 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
             break;
         }
         else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
-            if(event.mouse.x>menusXpadding&&event.mouse.x<menusXpadding+300 &&event.mouse.y>menusYpadding&&event.mouse.y<menusYpadding+150){
+            if(event.mouse.x>menusXpos&&event.mouse.x<menusXpos+300 &&event.mouse.y>menusYpos&&event.mouse.y<menusYpos+150){
                 p2p=1;
             } 
             else{
                 p2p=0;
             }
-            if(event.mouse.x>menusXpadding&&event.mouse.x<menusXpadding+300 &&event.mouse.y>menusYpadding*2&&event.mouse.y<menusYpadding+350){
+            if(event.mouse.x>menusXpos&&event.mouse.x<menusXpos+300 &&event.mouse.y>menusYpos*2&&event.mouse.y<menusYpos+350){
                 p2c=1;
             } 
             else{
                 p2c=0;
             }
-            if(event.mouse.x>menusXpadding&&event.mouse.x<menusXpadding+300 &&event.mouse.y>menusYpadding*3&&event.mouse.y<menusYpadding*2+350){
+            if(event.mouse.x>menusXpos&&event.mouse.x<menusXpos+300 &&event.mouse.y>menusYpos*3&&event.mouse.y<menusYpos*2+350){
                 salvo=1;
             } 
             else{
@@ -58,22 +58,22 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
         }
 
         if(p2p==0){
-            al_draw_bitmap(p2p1, menusXpadding, menusYpadding, 0);
+            al_draw_bitmap(p2p1, menusXpos, menusYpos, 0);
         }
         else{
-            al_draw_bitmap(p2p2, menusXpadding, menusYpadding, 0);
+            al_draw_bitmap(p2p2, menusXpos, menusYpos, 0);
         }
         if(p2c==0){
-            al_draw_bitmap(p2c1, menusXpadding, menusYpadding*2, 0);
+            al_draw_bitmap(p2c1, menusXpos, menusYpos*2, 0);
         }
         else{
-            al_draw_bitmap(p2c2, menusXpadding, menusYpadding*2, 0);
+            al_draw_bitmap(p2c2, menusXpos, menusYpos*2, 0);
         }
         if(salvo==0){
-            al_draw_bitmap(salvo1, menusXpadding, menusYpadding*3, 0);
+            al_draw_bitmap(salvo1, menusXpos, menusYpos*3, 0);
         }
         else{
-            al_draw_bitmap(salvo2, menusXpadding, menusYpadding*3, 0);
+            al_draw_bitmap(salvo2, menusXpos, menusYpos*3, 0);
         }
 
 
