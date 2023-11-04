@@ -26,7 +26,6 @@ void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo){
     fprintf(file, "}");
     fclose(file);
 }
-
 int menuLateral(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar){
     ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
     ALLEGRO_BITMAP * botaoSalva2 = al_load_bitmap("./img/Salvar2.jpg");
