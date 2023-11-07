@@ -1,5 +1,6 @@
 #include "ataque.h"
 #include "peca.h"
+#include <stdio.h>
 
 //VERIFICACOES:
 void verificaCaminhoDireita(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoDireita){
@@ -9,6 +10,9 @@ void verificaCaminhoDireita(struct Posicao posicoes[6][6], int linha, int coluna
             *limpoDireita=0;
         }
     }
+    // if(*limpoDireita==1){
+    //     printf("LimpoDireita\n");
+    // }
 }
 void verificaCaminhoEsquerda(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoEsquerda){
     *limpoEsquerda=1;
@@ -17,22 +21,31 @@ void verificaCaminhoEsquerda(struct Posicao posicoes[6][6], int linha, int colun
             *limpoEsquerda=0;
         }
     }
+    // if(*limpoEsquerda==1){
+    //     printf("LimpoEsquerda\n");
+    // }
 }
 void verificaCaminhoBaixo(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoBaixo){
     *limpoBaixo=1;
     for(int i=linha+1; i<6; i++){
-        if(posicoes[coluna][i].estado!=0&&posicoes[i][linha].selecionada==0){
+        if(posicoes[coluna][i].estado!=0&&posicoes[coluna][i].selecionada==0){
             *limpoBaixo=0;
         }
     }
+    // if(*limpoBaixo==1){
+    //     printf("LimpoBaixo\n");
+    // }
 }
 void verificaCaminhoCima(struct Posicao posicoes[6][6], int linha, int coluna, int *limpoCima){
     *limpoCima=1;
     for(int i=0; i<linha; i++){
-        if(posicoes[coluna][i].estado!=0&&posicoes[i][linha].selecionada==0){
+        if(posicoes[coluna][i].estado!=0&&posicoes[coluna][i].selecionada==0){
             *limpoCima=0;
         }
     }
+    // if(*limpoCima==1){
+    //     printf("LimpoCima\n");
+    // }
 }
 
 //VARREDURAS:

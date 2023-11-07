@@ -86,17 +86,25 @@ void localizaPeca(struct Posicao posicoes[6][6]){
     int linha=-1, coluna=-1;
     opcaoMovimento(posicoes, &linha, &coluna);
     if(linha==1||linha==2||coluna==3||coluna==4){
+        // printf("direitaSup1\n");
         direitaSuperior(posicoes, linha, coluna);
+        // printf("direitaSup2\n");
     }
-    else if(linha==3||linha==4||coluna==1||coluna==2){
+    if(linha==3||linha==4||coluna==1||coluna==2){
+        // printf("esquerdaInf1\n");
         esquerdaInferior(posicoes, linha, coluna);
+        // printf("esquerdaInf2\n");
     }
 
     if(linha==1||linha==2||coluna==1||coluna==2){
+        // printf("esquerdaSup1\n");
         esquerdaSuperior(posicoes, linha, coluna);
+        // printf("esquerdaSup2\n");
     }
-    else if(linha==3||linha==4||coluna==3||coluna==4){
+    if(linha==3||linha==4||coluna==3||coluna==4){
+        // printf("direitaInf1\n");
         direitaInferior(posicoes, linha, coluna);
+        // printf("direitaInf2\n");
     }
 
 }
@@ -130,8 +138,8 @@ void computador(struct Posicao posicoes[6][6], int *rodada){
                 selecionaPeca(posicoes[i][j].posX, posicoes[i][j].posY, posicoes, rodada);
                 localizaPeca(posicoes);
                 a = movePecaPC(posicoes, rodada, i, j);
-                printf("%d  ", posicoes[i][j].posX);
-                printf("%d\n", posicoes[i][j].posY);
+                printf("%d  ", i);
+                printf("%d\n", j);
                 if(a==1){
                     break;
                 }
@@ -144,6 +152,7 @@ void computador(struct Posicao posicoes[6][6], int *rodada){
             break;
         }
     }
+    printf("\n");
 
     // *rodada = *rodada+1;
 }
