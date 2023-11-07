@@ -30,7 +30,7 @@ int main (){
   al_set_window_title(display, "surakarta");
 
   ALLEGRO_FONT* font = al_create_builtin_font();
-  ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
+  ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
 
   ALLEGRO_EVENT_QUEUE * event_queue = al_create_event_queue();
   al_register_event_source(event_queue, al_get_display_event_source(display));
