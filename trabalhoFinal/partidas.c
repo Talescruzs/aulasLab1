@@ -4,6 +4,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -107,7 +108,7 @@ int menuLateral(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, AL
     return 0;
 
 }
-int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada){
+int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font){
     int linhas = 6;
     int colunas = 6;
     int i, j;
@@ -115,6 +116,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
     int inMenu=0;
     int inbtSalvar=0, inbtMenu=0;
     int menuInput=0;
+    char rodadaStr[15];
 
     ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
     ALLEGRO_BITMAP * peca1 = al_load_bitmap("./img/peca1.png");
@@ -163,6 +165,8 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
             result = 1;
             break;
         }
+        snprintf(rodadaStr, 15, "Rodada %d", *rodada);
+        al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
         menuInput = menuLateral(display, event_queue, &event, &inMenu, posicoes, rodada, 1, &result, &inbtMenu, &inbtSalvar);
 
 
@@ -176,7 +180,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
 
     return result;
 }
-int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada){
+int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font){
     int linhas = 6;
     int colunas = 6;
     int i, j;
@@ -184,6 +188,7 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
     int inMenu=0;
     int inbtSalvar=0, inbtMenu=0;
     int menuInput=0;
+    char rodadaStr[15];
 
     ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
     ALLEGRO_BITMAP * peca1 = al_load_bitmap("./img/peca1.png");
@@ -237,6 +242,8 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
             result = 1;
             break;
         }
+        snprintf(rodadaStr, 15, "Rodada %d", *rodada);
+        al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
         menuInput = menuLateral(display, event_queue, &event, &inMenu, posicoes, rodada, 2, &result, &inbtMenu, &inbtSalvar);
 
 
@@ -250,7 +257,7 @@ int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Po
     al_destroy_bitmap(opcao);
     return result;
 }
-void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo){
+void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo, ALLEGRO_FONT* font){
     FILE *file;
     file = fopen("save.txt", "r");
 

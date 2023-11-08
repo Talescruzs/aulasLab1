@@ -1,5 +1,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
@@ -22,6 +23,7 @@ int main (){
 
   al_init();
   al_init_font_addon();
+  al_init_ttf_addon();
   al_init_image_addon();
   al_install_mouse();
 
@@ -29,7 +31,7 @@ int main (){
   al_set_window_position(display, 100, 100);
   al_set_window_title(display, "surakarta");
 
-  ALLEGRO_FONT* font = al_create_builtin_font();
+  ALLEGRO_FONT* font = al_load_font("./font.ttf", 30, 0);;
   ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
 
   ALLEGRO_EVENT_QUEUE * event_queue = al_create_event_queue();
@@ -58,15 +60,15 @@ int main (){
       opcaoMenu = menu(display, event_queue);
     }
     if(opcaoMenu==1 || tipo==1){
-      continua = PvP(display, event_queue, posicoes, &rodada);
+      continua = PvP(display, event_queue, posicoes, &rodada, font);
       tipo=0;
     }
     else if(opcaoMenu==2 || tipo==2){
-      continua = PvPc(display, event_queue, posicoes, &rodada);
+      continua = PvPc(display, event_queue, posicoes, &rodada, font);
       tipo=0;
     }
     else if(opcaoMenu==3){
-      salvo(posicoes, &rodada, &tipo);
+      salvo(posicoes, &rodada, &tipo, font);
     }
     else{
       break;
