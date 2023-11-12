@@ -13,11 +13,17 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     ALLEGRO_BITMAP * p2c2 = al_load_bitmap("./img/playerXpc2.jpg");
     ALLEGRO_BITMAP * salvo1 = al_load_bitmap("./img/salvos1.jpg");
     ALLEGRO_BITMAP * salvo2 = al_load_bitmap("./img/salvos2.jpg");
+    ALLEGRO_BITMAP * historico1 = al_load_bitmap("./img/Historico1.jpg");
+    ALLEGRO_BITMAP * historico2 = al_load_bitmap("./img/Historico2.jpg");
+    ALLEGRO_BITMAP * ajuda1 = al_load_bitmap("./img/Ajuda1.jpg");
+    ALLEGRO_BITMAP * ajuda2 = al_load_bitmap("./img/Ajuda2.jpg");
 
     int inMenu = 1;
     int p2p=0;
     int p2c=0;
     int salvo=0;
+    int hist=0;
+    int aju=0;
 
     const int menusXpos=275;
     const int menusYpos=200;
@@ -52,6 +58,18 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
             else{
                 salvo=0;
             }
+            if(event.mouse.x>40&&event.mouse.x<(40+200) &&event.mouse.y>menusYpos*2&&event.mouse.y<menusYpos+350){
+                hist=1;
+            } 
+            else{
+                hist=0;
+            }
+            if(event.mouse.x>menusXpos+340&&event.mouse.x<menusXpos+340+200 &&event.mouse.y>menusYpos*2&&event.mouse.y<menusYpos+350){
+                aju=1;
+            } 
+            else{
+                aju=0;
+            }
         }
         else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && (p2c==1||p2p==1||salvo==1)){
             inMenu = 0;
@@ -75,6 +93,18 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
         else{
             al_draw_bitmap(salvo2, menusXpos, menusYpos*3, 0);
         }
+        if(hist==0){
+            al_draw_bitmap(historico1, 40, menusYpos*2, 0);
+        }
+        else{
+            al_draw_bitmap(historico2, 40, menusYpos*2, 0);
+        }
+        if(aju==0){
+            al_draw_bitmap(ajuda1, menusXpos+340, menusYpos*2, 0);
+        }
+        else{
+            al_draw_bitmap(ajuda2, menusXpos+340, menusYpos*2, 0);
+        }
 
 
         al_flip_display();
@@ -87,6 +117,10 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     al_destroy_bitmap(p2c2);
     al_destroy_bitmap(salvo1);
     al_destroy_bitmap(salvo2);
+    al_destroy_bitmap(historico1);
+    al_destroy_bitmap(historico2);
+    al_destroy_bitmap(ajuda1);
+    al_destroy_bitmap(ajuda2);
 
     if(p2p==1)
     return 1;
@@ -94,6 +128,10 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     return 2;
     else if(salvo==1)
     return 3;
+    else if(hist==1)
+    return 4;
+    else if(aju==1)
+    return 5;
 
     return 0;
 }

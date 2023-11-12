@@ -132,8 +132,8 @@ int movePecaPC(struct Posicao posicoes[6][6], int *rodada, int linha, int coluna
 }
 void computador(struct Posicao posicoes[6][6], int *rodada){
     int i, j, a=0;
-    for(j=0; j<6; j++){
-        for(i=0; i<6; i++){
+    for(i=0; i<6; i++){
+        for(j=0; j<6; j++){
             if(posicoes[i][j].estado==2){
                 selecionaPeca(posicoes[i][j].posX, posicoes[i][j].posY, posicoes, rodada);
                 localizaPeca(posicoes);
