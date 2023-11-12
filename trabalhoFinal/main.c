@@ -32,15 +32,17 @@ int main (){
   al_set_window_title(display, "surakarta");
 
   ALLEGRO_FONT* font = al_load_font("./font.ttf", 30, 0);;
-  ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
 
   ALLEGRO_EVENT_QUEUE * event_queue = al_create_event_queue();
   al_register_event_source(event_queue, al_get_display_event_source(display));
-  al_register_event_source(event_queue, al_get_timer_event_source(timer));
   al_register_event_source(event_queue, al_get_mouse_event_source() );
-  al_start_timer(timer);
+  // ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
+  // al_register_event_source(event_queue, al_get_timer_event_source(timer));
+  // al_start_timer(timer);
 
   int continua=1, opcaoMenu;
+  int64_t tempo=0;
+
   while(continua==1){
     opcaoMenu=0;
     if(tipo==0){
@@ -60,19 +62,23 @@ int main (){
       opcaoMenu = menu(display, event_queue);
     }
     if(opcaoMenu==1 || tipo==1){
-      continua = PvP(display, event_queue, posicoes, &rodada, font);
+      continua = PvP(display, event_queue, posicoes, &rodada, font, &tempo);
       tipo=0;
     }
     else if(opcaoMenu==2 || tipo==2){
-      continua = PvPc(display, event_queue, posicoes, &rodada, font);
+      continua = PvPc(display, event_queue, posicoes, &rodada, font, &tempo);
       tipo=0;
     }
     else if(opcaoMenu==3){
-      salvo(posicoes, &rodada, &tipo, font);
+      salvo(posicoes, &rodada, &tipo, font, &tempo);
+    }
+    else if(opcaoMenu==4){
+      // getHistorico(timer);
     }
     else{
       break;
     }
+
   }
 
   al_destroy_font(font);

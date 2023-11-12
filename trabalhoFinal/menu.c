@@ -3,6 +3,8 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <stdio.h>
+
 
 int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
 
@@ -71,7 +73,7 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
                 aju=0;
             }
         }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && (p2c==1||p2p==1||salvo==1)){
+        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && (p2c==1||p2p==1||salvo==1||hist==1||aju==1)){
             inMenu = 0;
         }
 
