@@ -8,6 +8,7 @@
 #include "peca.h"
 #include "menu.h"
 #include "partidas.h"
+#include "historico.h"
 
 int main (){
   int linhas = 6;
