@@ -1,7 +1,7 @@
 partida{
 rodada:1
-tipo:2
-tempo:3
+tipo:1
+tempo:2
 0X0{
 posx:140
 posy:150

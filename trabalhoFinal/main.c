@@ -18,8 +18,6 @@ int main (){
   struct Posicao posicoes[linhas][colunas];
 
   int i, j, pos=0;
-  
-  
 
   al_init();
   al_init_font_addon();
@@ -36,9 +34,9 @@ int main (){
   ALLEGRO_EVENT_QUEUE * event_queue = al_create_event_queue();
   al_register_event_source(event_queue, al_get_display_event_source(display));
   al_register_event_source(event_queue, al_get_mouse_event_source() );
-  // ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
-  // al_register_event_source(event_queue, al_get_timer_event_source(timer));
-  // al_start_timer(timer);
+  ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
+  al_register_event_source(event_queue, al_get_timer_event_source(timer));
+  al_start_timer(timer);
 
   int continua=1, opcaoMenu;
   int64_t tempo=0;
@@ -73,7 +71,7 @@ int main (){
       salvo(posicoes, &rodada, &tipo, font, &tempo);
     }
     else if(opcaoMenu==4){
-      // getHistorico(timer);
+      getHistorico(display, event_queue, font, &continua);
     }
     else{
       break;
