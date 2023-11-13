@@ -39,11 +39,10 @@ int main (){
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
   al_start_timer(timer);
 
-  int continua=1, opcaoMenu;
+  int continua=1;
   int64_t tempo=0;
 
   while(continua==1){
-    opcaoMenu=0;
     if(tipo==0){
       for(i=0; i<linhas; i++){
         for(j=0; j<colunas; j++){
@@ -58,20 +57,16 @@ int main (){
       }
     }
     if(tipo==0){
-      opcaoMenu = menu(display, event_queue);
+      tipo = menu(display, event_queue);
     }
-    if(opcaoMenu==1 || tipo==1){
-      continua = PvP(display, event_queue, posicoes, &rodada, font, &tempo);
+    if(tipo==1 || tipo==2){
+      continua = partida(display, event_queue, posicoes, &rodada, font, &tempo, tipo);
       tipo=0;
     }
-    else if(opcaoMenu==2 || tipo==2){
-      continua = PvPc(display, event_queue, posicoes, &rodada, font, &tempo);
-      tipo=0;
-    }
-    else if(opcaoMenu==3){
+    else if(tipo==3){
       salvo(posicoes, &rodada, &tipo, font, &tempo);
     }
-    else if(opcaoMenu==4){
+    else if(tipo==4){
       getHistorico(display, event_queue, font, &continua);
     }
     else{

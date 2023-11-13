@@ -138,8 +138,8 @@ void computador(struct Posicao posicoes[6][6], int *rodada){
                 selecionaPeca(posicoes[i][j].posX, posicoes[i][j].posY, posicoes, rodada);
                 localizaPeca(posicoes);
                 a = movePecaPC(posicoes, rodada, i, j);
-                printf("%d  ", i);
-                printf("%d\n", j);
+                // printf("%d  ", i);
+                // printf("%d\n", j);
                 if(a==1){
                     break;
                 }

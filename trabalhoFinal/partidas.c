@@ -1,6 +1,3 @@
-#include "peca.h"
-#include "menu.h"
-#include "historico.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
@@ -9,6 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#include "peca.h"
+#include "menu.h"
+#include "historico.h"
 
 int getRodada(){
     FILE *file;
@@ -150,7 +151,7 @@ int menuLateral(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, AL
     return 0;
 
 }
-int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font, int64_t *time){
+int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font, int64_t *time, int tipo){
     int linhas = 6;
     int colunas = 6;
     int i, j;
@@ -160,6 +161,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
     int menuInput=0;
     char rodadaStr[15];
     char tempoStr[15];
+    printf("%d\n", tipo);
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -172,21 +174,38 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
     ALLEGRO_BITMAP * seleciona = al_load_bitmap("./img/seleciona.png");
     ALLEGRO_BITMAP * opcao = al_load_bitmap("./img/opcao.png");
 
-    while(1 && menuInput!=-1){
+    while(menuInput!=-1){
         int64_t tempo = al_get_timer_count(timer)/30;
 
         qtd1=0, qtd2=0;
         localizaPeca(posicoes);
-
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
-        if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-            break;
+        if(tipo==1){
+            if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+                break;
+            }
+            else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
+                if(inMenu==0){
+                    selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                    movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                }
+            }
         }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-            if(inMenu==0){
-                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
-                movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+        else{
+            if(*rodada%2==0){
+            computador(posicoes, rodada);
+            }
+            else{
+                if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+                    break;
+                }
+                else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
+                    if(inMenu==0){
+                        selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                        movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                    }
+                }
             }
         }
 
@@ -214,10 +233,10 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
         if(qtd1==0||qtd2==0){
             result = 1;
             if(qtd1==0){
-                addHistorico(rodada, 1, 1, tempo);                
+                addHistorico(rodada, 1, tipo, tempo);                
             }
             else{
-                addHistorico(rodada, 2, 1, tempo);                
+                addHistorico(rodada, 2, tipo, tempo);                
             }
             break;
         }
@@ -225,7 +244,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
         snprintf(tempoStr, 15, "tempo: %ld", tempo);
         al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
         al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, tempoStr);
-        menuInput = menuLateral(display, event_queue, &event, &inMenu, posicoes, rodada, 1, &result, &inbtMenu, &inbtSalvar, timer);
+        menuInput = menuLateral(display, event_queue, &event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, timer);
 
 
         al_flip_display();
@@ -238,93 +257,7 @@ int PvP(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Pos
 
     return result;
 }
-int PvPc(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font, int64_t *time){
-    int linhas = 6;
-    int colunas = 6;
-    int i, j;
-    int result = 0, qtd1=0, qtd2=0;
-    int inMenu=0;
-    int inbtSalvar=0, inbtMenu=0;
-    int menuInput=0;
-    char rodadaStr[15];
-    char tempoStr[15];
 
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
-    al_register_event_source(event_queue, al_get_timer_event_source(timer));
-    al_start_timer(timer);
-    al_set_timer_count(timer, (*time)*30);
-
-    ALLEGRO_BITMAP * bg = al_load_bitmap("./img/fundo.png");
-    ALLEGRO_BITMAP * peca1 = al_load_bitmap("./img/peca1.png");
-    ALLEGRO_BITMAP * peca2 = al_load_bitmap("./img/peca2.png");
-    ALLEGRO_BITMAP * seleciona = al_load_bitmap("./img/seleciona.png");
-    ALLEGRO_BITMAP * opcao = al_load_bitmap("./img/opcao.png");
-
-
-    while(1 && menuInput!=-1){
-        int64_t tempo = al_get_timer_count(timer)/30;
-
-        qtd1=0, qtd2=0;
-        localizaPeca(posicoes);
-
-        if(*rodada%2==0){
-            computador(posicoes, rodada);
-        }
-        else{
-        ALLEGRO_EVENT event;
-        al_wait_for_event(event_queue, &event);
-        if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-            break;
-        }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-            if(inMenu==0){
-                selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
-                movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
-            }
-        }
-
-        al_clear_to_color(al_map_rgb(255,255,255));
-        al_draw_bitmap(bg, 0, 0, 0);
-
-        for(i=0; i<linhas; i++){
-            for(j=0; j<colunas; j++){
-                if(posicoes[i][j].estado==1){
-                    al_draw_bitmap(peca1, posicoes[i][j].posX, posicoes[i][j].posY, 0);
-                    qtd1++;
-                }
-                else if(posicoes[i][j].estado==2){
-                    al_draw_bitmap(peca2, posicoes[i][j].posX, posicoes[i][j].posY, 0);
-                    qtd2++;
-                }
-                if(posicoes[i][j].opcao==1){
-                    al_draw_bitmap(opcao, posicoes[i][j].posX, posicoes[i][j].posY, 0);
-                }
-                if(posicoes[i][j].selecionada==1){
-                    al_draw_bitmap(seleciona, posicoes[i][j].posX, posicoes[i][j].posY, 0);
-                }
-            }
-        }
-        if(qtd1==0||qtd2==0){
-            result = 1;
-            break;
-        }
-        snprintf(rodadaStr, 15, "Rodada %d", *rodada);
-        snprintf(tempoStr, 15, "tempo: %ld", tempo);
-        al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
-        al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, tempoStr);
-        menuInput = menuLateral(display, event_queue, &event, &inMenu, posicoes, rodada, 2, &result, &inbtMenu, &inbtSalvar, timer);
-
-
-        al_flip_display();
-        }
-    }
-    al_destroy_bitmap(bg);
-    al_destroy_bitmap(peca1);
-    al_destroy_bitmap(peca2);
-    al_destroy_bitmap(seleciona);
-    al_destroy_bitmap(opcao);
-    return result;
-}
 void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo, ALLEGRO_FONT* font, int64_t *tempo){
     FILE *file;
     file = fopen("save.txt", "r");

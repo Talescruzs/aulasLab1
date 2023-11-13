@@ -1,11 +1,11 @@
 partida{
-rodada:1
-tipo:1
-tempo:2
+rodada:9
+tipo:2
+tempo:4
 0X0{
 posx:140
 posy:150
-estado:2
+estado:0
 }
 0X1{
 posx:140
@@ -15,7 +15,7 @@ estado:2
 0X2{
 posx:140
 posy:320
-estado:0
+estado:2
 }
 0X3{
 posx:140
@@ -115,7 +115,7 @@ estado:0
 3X4{
 posx:368
 posy:490
-estado:1
+estado:0
 }
 3X5{
 posx:368
@@ -135,7 +135,7 @@ estado:2
 4X2{
 posx:444
 posy:320
-estado:0
+estado:1
 }
 4X3{
 posx:444
