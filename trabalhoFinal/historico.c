@@ -199,3 +199,107 @@ void addHistorico(int *rodada, int vencedor, int tipo, int64_t tempo){
     fprintf(file, "\n");
     fclose(file);
 }
+void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALLEGRO_FONT* font, int *continua, int parte){
+    FILE *file;
+    char nomeArquivo[20];
+    ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
+    ALLEGRO_BITMAP * botaoMenu1 = al_load_bitmap("./img/voltaMenu1.jpg");
+    ALLEGRO_BITMAP * botaoMenu2 = al_load_bitmap("./img/voltaMenu2.jpg");
+
+    ALLEGRO_BITMAP * prox1 = al_load_bitmap("./img/prox1.jpg");
+    ALLEGRO_BITMAP * ant1 = al_load_bitmap("./img/ant1.jpg");
+
+    if(parte>0&&parte<4){
+        snprintf(nomeArquivo, 20, "ajuda%d.txt", parte);
+        file = fopen(nomeArquivo, "r");
+
+        char tLinha[100][100];
+        char tam=0, i;
+
+        while(fgets(tLinha[tam], 100, file)) {
+            for(i=0; tLinha[tam][i]!='\0'; i++){
+                if(tLinha[tam][i]=='\n'){
+                    tLinha[tam][i]='\0';
+                }
+            }
+            tam++;
+        }
+        // Close the file
+        fclose(file);
+        int inbtMenu=0;
+        int inbtProx=0;
+        int inbtAnt=0;
+        while(1){
+            ALLEGRO_EVENT event;
+            al_wait_for_event(event_queue, &event);
+
+            al_clear_to_color(al_map_rgb(255,255,255));
+            al_draw_bitmap(bgMenu, 0, 0, 0);
+            for(i=0; i<tam; i++){
+                al_draw_text(font, al_map_rgb(0, 0, 0), 20, 130+(30*i), 0, tLinha[i]);
+
+            }
+            if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+                *continua=0;
+                break;
+            }
+            else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
+                if(event.mouse.x>=330&&event.mouse.x<=530&&event.mouse.y>=660){
+                    break;
+                }
+                if(event.mouse.x>=650&&event.mouse.y>=660){
+                    telaAjuda(display, event_queue, font, continua, parte+1);
+                    break;
+                }
+                if(event.mouse.x>=0&&event.mouse.x<=200&&event.mouse.y>=660){
+                    telaAjuda(display, event_queue, font, continua, parte-1);
+                    break;
+                }
+            }
+            else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
+                if(event.mouse.x>=330&&event.mouse.x<=530&&event.mouse.y>=660){
+                    inbtMenu=1;
+                } 
+                else{
+                    inbtMenu=0;
+                }
+                if(event.mouse.x>=650&&event.mouse.y>=660){
+                    inbtProx=1;
+                } 
+                else{
+                    inbtProx=0;
+                }
+                if(event.mouse.x>=0&&event.mouse.x>=200&&event.mouse.y>=660){
+                    inbtAnt=1;
+                } 
+                else{
+                    inbtAnt=0;
+                }
+            }
+
+            if(inbtMenu==0){
+                al_draw_bitmap(botaoMenu1, 330, 660, 0);
+            }
+            else if(inbtMenu==1){
+                al_draw_bitmap(botaoMenu2, 330, 660, 0);
+            }
+            if(inbtProx==0){
+                al_draw_bitmap(prox1, 650, 660, 0);
+            }
+            else if(inbtProx==1){
+                al_draw_bitmap(prox1, 650, 660, 0);
+            }
+            if(inbtAnt==0){
+                al_draw_bitmap(ant1, 0, 660, 0);
+            }
+            else if(inbtAnt==1){
+                al_draw_bitmap(ant1, 0, 660, 0);
+            }
+
+            al_flip_display();
+        }
+    }
+    al_destroy_bitmap(bgMenu);
+    al_destroy_bitmap(botaoMenu1);
+    al_destroy_bitmap(botaoMenu2);
+}

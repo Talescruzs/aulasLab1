@@ -68,6 +68,11 @@ int main (){
     }
     else if(tipo==4){
       getHistorico(display, event_queue, font, &continua);
+      tipo=0;
+    }
+    else if(tipo==5){
+      telaAjuda(display, event_queue, font, &continua, 1);
+      tipo=0;
     }
     else{
       break;

@@ -1,0 +1,11 @@
+
+
+    Surakarta é um jogo de tabuleiro de 
+estratégia indonésio pouco conhecido, 
+criado em homenagem à antiga cidade 
+de Surakarta, no centro de Java.
+
+    O objetivo do jogo é capturar todas as 
+peças do adversário ou ter um maior 
+número de peças caso mais nenhuma peça 
+puder ser capturada. 

@@ -1,0 +1,17 @@
+    Os adversários se alternam fazendo um 
+lance por vez. 
+
+    O movimento de um jogador consiste 
+em andar com uma de suas peças, apenas 
+uma casa por vez, em qualquer direção, na 
+horizontal, vertical, diagonal, para 
+frente e para trás, porém não é possível 
+caminhar pelos círculos nos cantos do 
+tabuleiro, a menos que seja para capturar 
+uma peça do adversário. 
+
+    Não é permitido saltar unidades próprias 
+ou adversárias. Também não se pode invadir 
+um ponto já ocupado, exceto para fazer uma 
+captura, situação em que a peça atacada é 
+removida definitivamente do tabuleiro. 

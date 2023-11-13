@@ -1,0 +1,15 @@
+    Um movimento de captura consiste em 
+percorrer um circuito interno ou externo em 
+torno de pelo menos um dos oito cantos do 
+tabuleiro, seguido de pousar em uma peça 
+adversária, capturando-a. 
+    As peças capturadas são removidas do jogo.
+
+    Assim, para capturar uma peça adversária, 
+é necessário mover a sua e colocá-la no lugar 
+dela, passando, pelo menos uma vez, por um 
+dos circuitos dos cantos do tabuleiro. Para a 
+captura, e somente nessa hipótese, a peça 
+atacante pode percorrer qualquer número de 
+posições vagas, mas apenas no sentido 
+horizontal ou vertical. 
