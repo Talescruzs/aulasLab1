@@ -44,8 +44,8 @@ int main (){
 
   while(continua==1){
     if(tipo==0){
-      for(i=0; i<linhas; i++){
-        for(j=0; j<colunas; j++){
+      for(i=0; i<colunas; i++){
+        for(j=0; j<linhas; j++){
         struct Posicao posicao = {140+(i*76), 150+(j*85), 0, 0, 0};
           if(j<2)
             posicao.estado=2;

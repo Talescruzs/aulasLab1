@@ -16,7 +16,7 @@ int getRodada(){
     file = fopen("historico.txt", "r");
 
     char tLinha[100], dado[10], *teste, *palavra;
-    int i, tam=0, count=0, result=1;
+    int i, tam=0, count=0, result=0;
 
     while(fgets(tLinha, 100, file)) {
         tam=0;
@@ -67,89 +67,86 @@ void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo, int64_t 
     fprintf(file, "}");
     fclose(file);
 }
-int menuLateral(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar, ALLEGRO_TIMER* timer){
+void criaBt(ALLEGRO_EVENT *event, int posX, int posY, int tamX, int tamY, ALLEGRO_BITMAP * img1, ALLEGRO_BITMAP * img2, int *apertou, int *inbt){
+    if(event->type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
+        if(event->mouse.x>=posX&&event->mouse.x<=posX+tamX&&event->mouse.y>=posY&&event->mouse.y<=posY+tamY && *inbt==1){
+            *apertou=1;
+        }
+        else{
+            *apertou=0;
+        }
+    }
+    else if(event->type==ALLEGRO_EVENT_MOUSE_AXES){ 
+        if(event->mouse.x>=posX&&event->mouse.x<=posX+tamX&&event->mouse.y>=posY&&event->mouse.y<=posY+tamY){
+            *inbt=1;
+        } 
+        else{
+            *inbt=0;
+        }
+    }
+
+    if(*inbt==0){
+        al_draw_bitmap(img1, posX, posY, 0);
+    }
+    else{
+        al_draw_bitmap(img2, posX, posY, 0);
+    }
+}
+int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar, int *inbtDica, ALLEGRO_TIMER* timer){
     ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
     ALLEGRO_BITMAP * botaoSalva2 = al_load_bitmap("./img/Salvar2.jpg");
     ALLEGRO_BITMAP * botaoMenu1 = al_load_bitmap("./img/voltaMenu1.jpg");
     ALLEGRO_BITMAP * botaoMenu2 = al_load_bitmap("./img/voltaMenu2.jpg");
+    ALLEGRO_BITMAP * botaoDica1 = al_load_bitmap("./img/dica1.jpg");
+    ALLEGRO_BITMAP * botaoDica2 = al_load_bitmap("./img/dica2.jpg");
     ALLEGRO_BITMAP * barra = al_load_bitmap("./img/barraMenu.jpg");
     ALLEGRO_BITMAP * cobreFundo = al_load_bitmap("./img/cobreFundo.png");
+
+    int apertouDica = 0;
+    int apertouVoltaMenu = 0;
+    int apertouSalva = 0;
+
+    if(*inMenu==0){
+        criaBt(event, 650, 325, 150, 150, botaoMenu1, botaoMenu2, inMenu, inbtMenu);
+    }
+    else{
+        al_draw_bitmap(cobreFundo, 0, 0, 0);
+        al_draw_bitmap(barra, 600, 0, 0);
+        criaBt(event, 625, 100, 150, 150, botaoSalva1, botaoSalva2, &apertouSalva, inbtSalvar);
+        criaBt(event, 625, 300, 150, 150, botaoMenu1, botaoMenu2, &apertouVoltaMenu, inbtMenu);
+        criaBt(event, 625, 500, 150, 150, botaoDica1, botaoDica2, &apertouDica, inbtDica);
+    }
 
     if( event->type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
         return -1;
     }
     else if(event->type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-        if(event->mouse.x>=650&&event->mouse.y>=325&&event->mouse.y<=475 && *inMenu==0){
-            *inMenu=1;
+        if(*inMenu==1){
             al_stop_timer(timer);
-            // al_set_timer_count(timer, 3000);
-        }
-        else if(*inMenu==1){
             if(event->mouse.x<=600){
                 *inMenu=0;
                 al_resume_timer(timer);
             }
-            else if(event->mouse.x>=625&&event->mouse.x<=825&&event->mouse.y>=100&&event->mouse.y<=250){
+            if(apertouSalva==1){
                 salvaPartida(posicoes, rodada, tipo, al_get_timer_count(timer)/30);
             }
-            else if(event->mouse.x>=625&&event->mouse.x<=825&&event->mouse.y>=300&&event->mouse.y<=450){
+            else if(apertouVoltaMenu==1){
                 *result = 1;
                 return -1;
             }
         }
     }
-    else if(event->type==ALLEGRO_EVENT_MOUSE_AXES){ 
-        if(event->mouse.x>=650&&event->mouse.y>=325&&event->mouse.y<=475 && *inMenu==0){
-            *inbtMenu=1;
-        } 
-        else if(*inMenu==0){
-            *inbtMenu=0;
-        }
-        if(event->mouse.x>=625&&event->mouse.x<=825&&event->mouse.y>=300&&event->mouse.y<=450 && *inMenu==1){
-            *inbtMenu=1;
-        } 
-        else if(*inMenu==1){
-            *inbtMenu=0;
-        }
-        if(event->mouse.x>=625&&event->mouse.x<=825&&event->mouse.y>=100&&event->mouse.y<=250){
-            *inbtSalvar=1;
-        } 
-        else{
-            *inbtSalvar=0;
-        }
-    }
-    if(*inbtMenu==0){
-        al_draw_bitmap(botaoMenu1, 650, 325, 0);
-    }
-    else if(*inbtMenu==1){
-        al_draw_bitmap(botaoMenu2, 650, 325, 0);
-    }
-    if(*inMenu==1){
-        al_draw_bitmap(cobreFundo, 0, 0, 0);
-        al_draw_bitmap(barra, 600, 0, 0);
-        if(*inbtSalvar==0){
-            al_draw_bitmap(botaoSalva1, 625, 100, 0);
-        }
-        else if(*inbtSalvar==1){
-            al_draw_bitmap(botaoSalva2, 625, 100, 0);
-        }
-        if(*inbtMenu==0){
-            al_draw_bitmap(botaoMenu1, 625, 300, 0);
-        }
-        else if(*inbtMenu==1){
-            al_draw_bitmap(botaoMenu2, 625, 300, 0);
-        }
-    }
-
 
     al_destroy_bitmap(botaoSalva1);
     al_destroy_bitmap(botaoSalva2);
     al_destroy_bitmap(botaoMenu1);
     al_destroy_bitmap(botaoMenu2);
+    al_destroy_bitmap(botaoDica1);
+    al_destroy_bitmap(botaoDica2);
     al_destroy_bitmap(barra);
     al_destroy_bitmap(cobreFundo);
-    return 0;
 
+    return 0;
 }
 int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font, int64_t *time, int tipo){
     int linhas = 6;
@@ -157,7 +154,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
     int i, j;
     int result = 0, qtd1=0, qtd2=0;
     int inMenu=0;
-    int inbtSalvar=0, inbtMenu=0;
+    int inbtSalvar=0, inbtMenu=0, inbtDica=0;
     int menuInput=0;
     char rodadaStr[15];
     char tempoStr[15];
@@ -249,7 +246,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
         snprintf(tempoStr, 15, "tempo: %ld", tempo);
         al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
         al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, tempoStr);
-        menuInput = menuLateral(display, event_queue, &event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, timer);
+        menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer);
 
 
         al_flip_display();
