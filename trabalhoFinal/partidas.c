@@ -161,7 +161,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
     int menuInput=0;
     char rodadaStr[15];
     char tempoStr[15];
-    printf("%d\n", tipo);
+    int continua=1;
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -194,7 +194,12 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
         }
         else{
             if(*rodada%2==0){
-            computador(posicoes, rodada);
+                continua = computador(posicoes, rodada);
+                if(continua==0){
+                    addHistorico(rodada, 0, tipo, tempo);
+                    result = 1;
+                    break; 
+                }
             }
             else{
                 if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
@@ -233,10 +238,10 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
         if(qtd1==0||qtd2==0){
             result = 1;
             if(qtd1==0){
-                addHistorico(rodada, 1, tipo, tempo);                
+                addHistorico(rodada, 2, tipo, tempo);                
             }
             else{
-                addHistorico(rodada, 2, tipo, tempo);                
+                addHistorico(rodada, 1, tipo, tempo);                
             }
             break;
         }
@@ -257,7 +262,6 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
 
     return result;
 }
-
 void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo, ALLEGRO_FONT* font, int64_t *tempo){
     FILE *file;
     file = fopen("save.txt", "r");
