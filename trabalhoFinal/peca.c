@@ -82,28 +82,28 @@ void opcaoMovimento(struct Posicao posicoes[6][6], int *linha, int *coluna){
         }
     }
 }
-void localizaPeca(struct Posicao posicoes[6][6]){
-    int linha=-1, coluna=-1;
+void localizaPeca(struct Posicao posicoes[6][6], int time){
+    int linha=-1, coluna=-1, index=0;
     opcaoMovimento(posicoes, &linha, &coluna);
     if(linha==1||linha==2||coluna==3||coluna==4){
         // printf("direitaSup1\n");
-        direitaSuperior(posicoes, linha, coluna);
+        direitaSuperior(posicoes, linha, coluna, index, time);
         // printf("direitaSup2\n");
     }
     if(linha==3||linha==4||coluna==1||coluna==2){
         // printf("esquerdaInf1\n");
-        esquerdaInferior(posicoes, linha, coluna);
+        esquerdaInferior(posicoes, linha, coluna, index, time);
         // printf("esquerdaInf2\n");
     }
 
     if(linha==1||linha==2||coluna==1||coluna==2){
         // printf("esquerdaSup1\n");
-        esquerdaSuperior(posicoes, linha, coluna);
+        esquerdaSuperior(posicoes, linha, coluna, index, time);
         // printf("esquerdaSup2\n");
     }
     if(linha==3||linha==4||coluna==3||coluna==4){
         // printf("direitaInf1\n");
-        direitaInferior(posicoes, linha, coluna);
+        direitaInferior(posicoes, linha, coluna, index, time);
         // printf("direitaInf2\n");
     }
 
@@ -114,7 +114,7 @@ int movePecaPC(struct Posicao posicoes[6][6], int *rodada){
         for(int k=0; k<6; k++){
             if(posicoes[k][v].estado==2){
                 selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
-                localizaPeca(posicoes);
+                localizaPeca(posicoes, 2);
                 
                 
                 for(int i=0; i<6; i++){
@@ -132,7 +132,7 @@ int movePecaPC(struct Posicao posicoes[6][6], int *rodada){
         for(int k=0; k<6; k++){
             if(posicoes[k][v].estado==2){
                 selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
-                localizaPeca(posicoes);
+                localizaPeca(posicoes, 2);
                 
                 
                 for(int i=0; i<6; i++){
@@ -153,7 +153,7 @@ int tentaAtaque(struct Posicao posicoes[6][6], int *rodada){
         for(int k=0; k<6; k++){
             if(posicoes[k][v].estado==2){
                 selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
-                localizaPeca(posicoes);
+                localizaPeca(posicoes, 2);
 
                 for(int i=0; i<6; i++){
                     for(int j=0; j<6; j++){
@@ -190,7 +190,7 @@ int dicaAtaque(struct Posicao posicoes[6][6], int *rodada){
         for(int k=0; k<6; k++){
             if(posicoes[k][v].estado==tipo && atacou==0){
                 selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
-                localizaPeca(posicoes);
+                localizaPeca(posicoes, tipo);
 
                 for(int i=0; i<6; i++){
                     for(int j=0; j<6; j++){
@@ -222,7 +222,7 @@ int dicaMovimento(struct Posicao posicoes[6][6], int *rodada){
         for(int k=0; k<6; k++){
             if(posicoes[k][v].estado==tipo && moveu==0){
                 selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
-                localizaPeca(posicoes);
+                localizaPeca(posicoes, tipo);
                 
                 for(int i=0; i<6; i++){
                     for(int j=0; j<6; j++){

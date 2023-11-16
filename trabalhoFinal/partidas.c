@@ -141,6 +141,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
     int continua=1;
     int qtdDica1=0, qtdDica2=0;
     int deuDica=0, testeDica=0;
+    int lado =0;
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -155,10 +156,14 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
 
     while(menuInput!=-1){
         int64_t tempo = al_get_timer_count(timer)/30;
+        if(*rodada%2==1)
+        lado=1;
+        else
+        lado=2;
 
         qtd1=0, qtd2=0;
         if(!deuDica){
-            localizaPeca(posicoes); 
+            localizaPeca(posicoes, lado); 
         }
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);

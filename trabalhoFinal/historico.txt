@@ -16,3 +16,9 @@ tipo:1
 vencedor:1
 tempo:73
 
+partida:4
+rodada:38
+tipo:2
+vencedor:1
+tempo:122
+
