@@ -9,6 +9,7 @@
 
 #include "historico.h"
 #include "partidas.h"
+#include "menu.h"
 
 void getHistorico(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALLEGRO_FONT* font, int *continua){
     FILE *file;
@@ -114,13 +115,16 @@ void getHistorico(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, 
 
     // Close the file
     fclose(file);
-    int inbtMenu=0;
-    while(1){
+    int inbtMenu=0, apertouMenu=0;
+    int segueTela=1;
+
+    while(segueTela==1){
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
 
         al_clear_to_color(al_map_rgb(255,255,255));
         al_draw_bitmap(bgMenu, 0, 0, 0);
+
         for(i=0; i<nHistorico; i++){
             snprintf(rodadaStr, 15, "%d", historico[i].rodada);
             snprintf(partidaStr, 15, "%d", historico[i].partida);
@@ -153,33 +157,16 @@ void getHistorico(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, 
             al_draw_text(font, al_map_rgb(0, 0, 0), 750, 200+(50*i), 0, tempoStr);
 
         }
+        criaBt(&event, 650, 660, 200, 150, botaoMenu1, botaoMenu2, &apertouMenu, &inbtMenu);
+        if(apertouMenu==1){
+            segueTela=0;
+        }
         if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
             *continua=0;
-            break;
-        }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-            if(event.mouse.x>=650&&event.mouse.y>=660){
-                break;
-            }
-        }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
-            if(event.mouse.x>=650&&event.mouse.y>=660){
-                inbtMenu=1;
-            } 
-            else{
-                inbtMenu=0;
-            }
-        }
-
-        if(inbtMenu==0){
-            al_draw_bitmap(botaoMenu1, 650, 660, 0);
-        }
-        else if(inbtMenu==1){
-            al_draw_bitmap(botaoMenu2, 650, 660, 0);
+            segueTela=0;
         }
 
         al_flip_display();
-
     }
     al_destroy_bitmap(bgMenu);
     al_destroy_bitmap(botaoMenu1);
@@ -212,10 +199,8 @@ void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALL
     if(parte>0&&parte<4){
         snprintf(nomeArquivo, 20, "ajuda%d.txt", parte);
         file = fopen(nomeArquivo, "r");
-
         char tLinha[100][100];
         char tam=0, i;
-
         while(fgets(tLinha[tam], 100, file)) {
             for(i=0; tLinha[tam][i]!='\0'; i++){
                 if(tLinha[tam][i]=='\n'){
@@ -224,12 +209,13 @@ void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALL
             }
             tam++;
         }
-        // Close the file
         fclose(file);
-        int inbtMenu=0;
-        int inbtProx=0;
-        int inbtAnt=0;
-        while(1){
+
+        int apertouMenu=0, inbtMenu=0;
+        int apertouProx=0, inbtProx=0;
+        int apertouAnt=0, inbtAnt=0;
+        int segueTela=1;
+        while(segueTela==1){
             ALLEGRO_EVENT event;
             al_wait_for_event(event_queue, &event);
 
@@ -237,65 +223,26 @@ void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALL
             al_draw_bitmap(bgMenu, 0, 0, 0);
             for(i=0; i<tam; i++){
                 al_draw_text(font, al_map_rgb(0, 0, 0), 20, 130+(30*i), 0, tLinha[i]);
-
             }
             if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
                 *continua=0;
-                break;
-            }
-            else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-                if(event.mouse.x>=330&&event.mouse.x<=530&&event.mouse.y>=660){
-                    break;
-                }
-                if(event.mouse.x>=650&&event.mouse.y>=660){
-                    telaAjuda(display, event_queue, font, continua, parte+1);
-                    break;
-                }
-                if(event.mouse.x>=0&&event.mouse.x<=200&&event.mouse.y>=660){
-                    telaAjuda(display, event_queue, font, continua, parte-1);
-                    break;
-                }
-            }
-            else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
-                if(event.mouse.x>=330&&event.mouse.x<=530&&event.mouse.y>=660){
-                    inbtMenu=1;
-                } 
-                else{
-                    inbtMenu=0;
-                }
-                if(event.mouse.x>=650&&event.mouse.y>=660){
-                    inbtProx=1;
-                } 
-                else{
-                    inbtProx=0;
-                }
-                if(event.mouse.x>=0&&event.mouse.x>=200&&event.mouse.y>=660){
-                    inbtAnt=1;
-                } 
-                else{
-                    inbtAnt=0;
-                }
+                segueTela=0;
             }
 
-            if(inbtMenu==0){
-                al_draw_bitmap(botaoMenu1, 330, 660, 0);
+            criaBt(&event, 330, 660, 200, 150, botaoMenu1, botaoMenu2, &apertouMenu, &inbtMenu);
+            if(apertouMenu){
+                segueTela=0;
             }
-            else if(inbtMenu==1){
-                al_draw_bitmap(botaoMenu2, 330, 660, 0);
+            criaBt(&event, 650, 660, 200, 150, prox1, prox1, &apertouProx, &inbtProx);
+            if(apertouProx){
+                telaAjuda(display, event_queue, font, continua, parte+1);
+                segueTela=0;
             }
-            if(inbtProx==0){
-                al_draw_bitmap(prox1, 650, 660, 0);
+            criaBt(&event, 0, 660, 200, 150, ant1, ant1, &apertouAnt, &inbtAnt);
+            if(apertouAnt){
+                telaAjuda(display, event_queue, font, continua, parte-1);
+                segueTela=0;
             }
-            else if(inbtProx==1){
-                al_draw_bitmap(prox1, 650, 660, 0);
-            }
-            if(inbtAnt==0){
-                al_draw_bitmap(ant1, 0, 660, 0);
-            }
-            else if(inbtAnt==1){
-                al_draw_bitmap(ant1, 0, 660, 0);
-            }
-
             al_flip_display();
         }
     }
