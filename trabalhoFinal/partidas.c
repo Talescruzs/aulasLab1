@@ -67,31 +67,6 @@ void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo, int64_t 
     fprintf(file, "}");
     fclose(file);
 }
-void criaBt(ALLEGRO_EVENT *event, int posX, int posY, int tamX, int tamY, ALLEGRO_BITMAP * img1, ALLEGRO_BITMAP * img2, int *apertou, int *inbt){
-    if(event->type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-        if(event->mouse.x>=posX&&event->mouse.x<=posX+tamX&&event->mouse.y>=posY&&event->mouse.y<=posY+tamY && *inbt==1){
-            *apertou=1;
-        }
-        else{
-            *apertou=0;
-        }
-    }
-    else if(event->type==ALLEGRO_EVENT_MOUSE_AXES){ 
-        if(event->mouse.x>=posX&&event->mouse.x<=posX+tamX&&event->mouse.y>=posY&&event->mouse.y<=posY+tamY){
-            *inbt=1;
-        } 
-        else{
-            *inbt=0;
-        }
-    }
-
-    if(*inbt==0){
-        al_draw_bitmap(img1, posX, posY, 0);
-    }
-    else{
-        al_draw_bitmap(img2, posX, posY, 0);
-    }
-}
 int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar, int *inbtDica, ALLEGRO_TIMER* timer){
     ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
     ALLEGRO_BITMAP * botaoSalva2 = al_load_bitmap("./img/Salvar2.jpg");
@@ -246,8 +221,8 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
         snprintf(tempoStr, 15, "tempo: %ld", tempo);
         al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
         al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, tempoStr);
-        menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer);
 
+        menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer);
 
         al_flip_display();
     }

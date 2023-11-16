@@ -5,7 +5,31 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 
+void criaBt(ALLEGRO_EVENT *event, int posX, int posY, int tamX, int tamY, ALLEGRO_BITMAP * img1, ALLEGRO_BITMAP * img2, int *apertou, int *inbt){
+    if(event->type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
+        if(event->mouse.x>=posX&&event->mouse.x<=posX+tamX&&event->mouse.y>=posY&&event->mouse.y<=posY+tamY && *inbt==1){
+            *apertou=1;
+        }
+        else{
+            *apertou=0;
+        }
+    }
+    else if(event->type==ALLEGRO_EVENT_MOUSE_AXES){ 
+        if(event->mouse.x>=posX&&event->mouse.x<=posX+tamX&&event->mouse.y>=posY&&event->mouse.y<=posY+tamY){
+            *inbt=1;
+        } 
+        else{
+            *inbt=0;
+        }
+    }
 
+    if(*inbt==0){
+        al_draw_bitmap(img1, posX, posY, 0);
+    }
+    else{
+        al_draw_bitmap(img2, posX, posY, 0);
+    }
+}
 int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
 
     ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menu.jpg");
@@ -21,93 +45,32 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     ALLEGRO_BITMAP * ajuda2 = al_load_bitmap("./img/Ajuda2.jpg");
 
     int inMenu = 1;
-    int p2p=0;
-    int p2c=0;
-    int salvo=0;
-    int hist=0;
-    int aju=0;
+    int inbtPvP=0, apertouPvP=0;
+    int inbtPvPc=0, apertouPvPc=0;
+    int inbtSalvar=0, apertouSalvar=0;
+    int inbtHistorico=0, apertouHistorico=0;
+    int inbtAjuda=0, apertouAjuda=0;
 
     const int menusXpos=275;
     const int menusYpos=200;
 
     while(inMenu==1){
-
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
-
         al_clear_to_color(al_map_rgb(255,255,255));
         al_draw_bitmap(bgMenu, 0, 0, 0);
+        criaBt(&event, menusXpos, menusYpos, 300, 150, p2p1, p2p2, &apertouPvP, &inbtPvP);
+        criaBt(&event, menusXpos, menusYpos*2, 300, 150, p2c1, p2c2, &apertouPvPc, &inbtPvPc);
+        criaBt(&event, menusXpos, menusYpos*3, 300, 150, salvo1, salvo2, &apertouSalvar, &inbtSalvar);
+        criaBt(&event, 40, menusYpos*2, 200, 150, historico1, historico2, &apertouHistorico, &inbtHistorico);
+        criaBt(&event, menusXpos+340, menusYpos*2, 200, 150, ajuda1, ajuda2, &apertouAjuda, &inbtAjuda);
 
         if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
             break;
         }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_AXES){ 
-            if(event.mouse.x>menusXpos&&event.mouse.x<menusXpos+300 &&event.mouse.y>menusYpos&&event.mouse.y<menusYpos+150){
-                p2p=1;
-            } 
-            else{
-                p2p=0;
-            }
-            if(event.mouse.x>menusXpos&&event.mouse.x<menusXpos+300 &&event.mouse.y>menusYpos*2&&event.mouse.y<menusYpos+350){
-                p2c=1;
-            } 
-            else{
-                p2c=0;
-            }
-            if(event.mouse.x>menusXpos&&event.mouse.x<menusXpos+300 &&event.mouse.y>menusYpos*3&&event.mouse.y<menusYpos*2+350){
-                salvo=1;
-            } 
-            else{
-                salvo=0;
-            }
-            if(event.mouse.x>40&&event.mouse.x<(40+200) &&event.mouse.y>menusYpos*2&&event.mouse.y<menusYpos+350){
-                hist=1;
-            } 
-            else{
-                hist=0;
-            }
-            if(event.mouse.x>menusXpos+340&&event.mouse.x<menusXpos+340+200 &&event.mouse.y>menusYpos*2&&event.mouse.y<menusYpos+350){
-                aju=1;
-            } 
-            else{
-                aju=0;
-            }
-        }
-        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && (p2c==1||p2p==1||salvo==1||hist==1||aju==1)){
+        else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
             inMenu = 0;
         }
-
-        if(p2p==0){
-            al_draw_bitmap(p2p1, menusXpos, menusYpos, 0);
-        }
-        else{
-            al_draw_bitmap(p2p2, menusXpos, menusYpos, 0);
-        }
-        if(p2c==0){
-            al_draw_bitmap(p2c1, menusXpos, menusYpos*2, 0);
-        }
-        else{
-            al_draw_bitmap(p2c2, menusXpos, menusYpos*2, 0);
-        }
-        if(salvo==0){
-            al_draw_bitmap(salvo1, menusXpos, menusYpos*3, 0);
-        }
-        else{
-            al_draw_bitmap(salvo2, menusXpos, menusYpos*3, 0);
-        }
-        if(hist==0){
-            al_draw_bitmap(historico1, 40, menusYpos*2, 0);
-        }
-        else{
-            al_draw_bitmap(historico2, 40, menusYpos*2, 0);
-        }
-        if(aju==0){
-            al_draw_bitmap(ajuda1, menusXpos+340, menusYpos*2, 0);
-        }
-        else{
-            al_draw_bitmap(ajuda2, menusXpos+340, menusYpos*2, 0);
-        }
-
 
         al_flip_display();
     }
@@ -124,15 +87,15 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     al_destroy_bitmap(ajuda1);
     al_destroy_bitmap(ajuda2);
 
-    if(p2p==1)
+    if(apertouPvP==1)
     return 1;
-    else if(p2c==1)
+    else if(apertouPvPc==1)
     return 2;
-    else if(salvo==1)
+    else if(apertouSalvar==1)
     return 3;
-    else if(hist==1)
+    else if(apertouHistorico==1)
     return 4;
-    else if(aju==1)
+    else if(apertouAjuda==1)
     return 5;
 
     return 0;
