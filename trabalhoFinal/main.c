@@ -42,7 +42,7 @@ int main (){
   int continua=1;
   int64_t tempo=0;
 
-  while(continua==1){
+  while(continua!=-1){
     if(tipo==0){
       for(i=0; i<colunas; i++){
         for(j=0; j<linhas; j++){

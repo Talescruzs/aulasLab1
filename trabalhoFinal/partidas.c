@@ -75,8 +75,7 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
     ALLEGRO_BITMAP * botaoDica1 = al_load_bitmap("./img/dica1.jpg");
     ALLEGRO_BITMAP * botaoDica2 = al_load_bitmap("./img/dica2.jpg");
     ALLEGRO_BITMAP * barra = al_load_bitmap("./img/barraMenu.jpg");
-    ALLEGRO_BITMAP * cobreFundo = al_load_bitmap("./img/cobreFundo.png");
-
+    ALLEGRO_BITMAP * cobreFundo = al_load_bitmap("./img/cobreFundo2.png");
     int apertouDica = 0;
     int apertouVoltaMenu = 0;
     int apertouSalva = 0;
@@ -84,6 +83,20 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
 
     if(*inMenu==0){
         criaBt(event, 650, 325, 150, 150, botaoMenu1, botaoMenu2, inMenu, inbtMenu);
+    }
+    else if(*inMenu>0&&*inMenu<25){
+        *inMenu=*inMenu+1;
+        al_draw_bitmap(cobreFundo, 0, 0, 0);
+        al_draw_bitmap(barra, 850-(10*(*inMenu)), 0, 0);
+    }
+    else if(*inMenu>25&&*inMenu<50){
+        *inMenu=*inMenu+1;
+        al_draw_bitmap(cobreFundo, 0, 0, 0);
+        al_draw_bitmap(barra, 600+(5*(*inMenu)), 0, 0);
+    }
+    else if(*inMenu==50){
+        *inMenu=0;
+        al_resume_timer(timer);
     }
     else{
         al_draw_bitmap(cobreFundo, 0, 0, 0);
@@ -102,16 +115,17 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
             deuDica = dica(posicoes, qtdDica, tipo, rodada);
         }
     }
-
     if( event->type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
         return -1;
     }
     else if(event->type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
-        if(*inMenu==1){
+        if(*inMenu>0){
             al_stop_timer(timer);
-            if(event->mouse.x<=600 || deuDica==1){
+            if(event->mouse.x<=600){
+                *inMenu=26;
+            }
+            else if(deuDica==1){
                 *inMenu=0;
-                al_resume_timer(timer);
             }
         }
     }
