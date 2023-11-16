@@ -57,6 +57,7 @@ int main (){
       }
     }
     if(tipo==0){
+      rodada=1;
       tipo = menu(display, event_queue);
     }
     if(tipo==1 || tipo==2){

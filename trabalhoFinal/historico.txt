@@ -10,3 +10,9 @@ tipo:2
 vencedor:2
 tempo:31
 
+partida:3
+rodada:42
+tipo:1
+vencedor:1
+tempo:73
+
