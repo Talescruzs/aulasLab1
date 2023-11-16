@@ -66,8 +66,9 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
         criaBt(&event, menusXpos+340, menusYpos*2, 200, 150, ajuda1, ajuda2, &apertouAjuda, &inbtAjuda);
 
         if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-            break;
+            inMenu = -1;
         }
+
         else if(event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
             inMenu = 0;
         }
@@ -98,5 +99,5 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
     else if(apertouAjuda==1)
     return 5;
 
-    return 0;
+    return inMenu;
 }
