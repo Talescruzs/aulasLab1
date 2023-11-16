@@ -67,7 +67,7 @@ void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo, int64_t 
     fprintf(file, "}");
     fclose(file);
 }
-int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar, int *inbtDica, ALLEGRO_TIMER* timer){
+int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar, int *inbtDica, ALLEGRO_TIMER* timer, int*qtdDica){
     ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
     ALLEGRO_BITMAP * botaoSalva2 = al_load_bitmap("./img/Salvar2.jpg");
     ALLEGRO_BITMAP * botaoMenu1 = al_load_bitmap("./img/voltaMenu1.jpg");
@@ -80,6 +80,7 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
     int apertouDica = 0;
     int apertouVoltaMenu = 0;
     int apertouSalva = 0;
+    int deuDica = 0;
 
     if(*inMenu==0){
         criaBt(event, 650, 325, 150, 150, botaoMenu1, botaoMenu2, inMenu, inbtMenu);
@@ -88,8 +89,18 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
         al_draw_bitmap(cobreFundo, 0, 0, 0);
         al_draw_bitmap(barra, 600, 0, 0);
         criaBt(event, 625, 100, 150, 150, botaoSalva1, botaoSalva2, &apertouSalva, inbtSalvar);
+        if(apertouSalva==1){
+            salvaPartida(posicoes, rodada, tipo, al_get_timer_count(timer)/30);
+        }
         criaBt(event, 625, 300, 150, 150, botaoMenu1, botaoMenu2, &apertouVoltaMenu, inbtMenu);
+        if(apertouVoltaMenu==1){
+            *result = 1;
+            return -1;
+        }
         criaBt(event, 625, 500, 150, 150, botaoDica1, botaoDica2, &apertouDica, inbtDica);
+        if(apertouDica==1){
+            deuDica = dica(posicoes, qtdDica, tipo, rodada);
+        }
     }
 
     if( event->type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
@@ -98,16 +109,9 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
     else if(event->type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){ 
         if(*inMenu==1){
             al_stop_timer(timer);
-            if(event->mouse.x<=600){
+            if(event->mouse.x<=600 || deuDica==1){
                 *inMenu=0;
                 al_resume_timer(timer);
-            }
-            if(apertouSalva==1){
-                salvaPartida(posicoes, rodada, tipo, al_get_timer_count(timer)/30);
-            }
-            else if(apertouVoltaMenu==1){
-                *result = 1;
-                return -1;
             }
         }
     }
@@ -133,7 +137,10 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
     int menuInput=0;
     char rodadaStr[15];
     char tempoStr[15];
+    char qtdDicaStr[15];
     int continua=1;
+    int qtdDica1=0, qtdDica2=0;
+    int deuDica=0, testeDica=0;
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -150,7 +157,9 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
         int64_t tempo = al_get_timer_count(timer)/30;
 
         qtd1=0, qtd2=0;
-        localizaPeca(posicoes);
+        if(!deuDica){
+            localizaPeca(posicoes); 
+        }
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
         if(tipo==1){
@@ -161,6 +170,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
                 if(inMenu==0){
                     selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
                     movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                    deuDica=0;
                 }
             }
         }
@@ -181,6 +191,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
                     if(inMenu==0){
                         selecionaPeca(event.mouse.x, event.mouse.y, posicoes, rodada);
                         movePeca(event.mouse.x, event.mouse.y, posicoes, rodada);
+                        deuDica=0;
                     }
                 }
             }
@@ -217,12 +228,46 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
             }
             break;
         }
-        snprintf(rodadaStr, 15, "Rodada %d", *rodada);
-        snprintf(tempoStr, 15, "tempo: %ld", tempo);
-        al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, rodadaStr);
-        al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, tempoStr);
+        
 
-        menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer);
+        if(tipo==1){
+            if(*rodada%2==1){
+                testeDica = qtdDica1;
+                menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, &qtdDica1);
+                if(testeDica!=qtdDica1){
+                    deuDica=1;
+                }
+            }
+            else{
+                testeDica = qtdDica2;
+                menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, &qtdDica2);
+                if(testeDica!=qtdDica2){
+                    deuDica=1;
+                }
+            }
+            snprintf(qtdDicaStr, 15, "Dicas 1: %d", qtdDica1);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, qtdDicaStr);
+            snprintf(qtdDicaStr, 15, "Dicas 2: %d", qtdDica2);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, qtdDicaStr);
+            snprintf(rodadaStr, 15, "Rodada %d", *rodada);
+            snprintf(tempoStr, 15, "Tempo: %ld", tempo);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 770, 0, rodadaStr);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 740, 0, tempoStr);
+        }
+        else{
+            testeDica = qtdDica1;
+            menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, &qtdDica1);
+            if(testeDica!=qtdDica1){
+                deuDica=1;
+            }
+            snprintf(qtdDicaStr, 15, "Dicas: %d", qtdDica1);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, qtdDicaStr);
+            snprintf(rodadaStr, 15, "Rodada %d", *rodada);
+            snprintf(tempoStr, 15, "Tempo: %ld", tempo);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 770, 0, rodadaStr);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 670, 740, 0, tempoStr);
+        }
+
 
         al_flip_display();
     }

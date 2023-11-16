@@ -1,0 +1,14 @@
+    Conforme mencionado, a peça atacante deve 
+passar obrigatoriamente, pelo menos uma vez, 
+por um dos oito circuitos localizados nos 
+cantos do tabuleiro, terminando o movimento 
+na posição onde se encontra a peça a ser 
+capturada. 
+
+    Vale passar por mais de um circuito para 
+fazer uma captura, mas, como nos movimentos 
+normais, aqui também não se permitem saltos 
+sobre peças. É importante notar que as 
+capturas não são obrigatórias, como acontece 
+no jogo de damas, por exemplo. Ainda, somente 
+é permitida uma captura por jogada.

@@ -172,7 +172,6 @@ void getHistorico(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, 
     al_destroy_bitmap(botaoMenu1);
     al_destroy_bitmap(botaoMenu2);
 }
-
 void addHistorico(int *rodada, int vencedor, int tipo, int64_t tempo){
     int ultimaPartida = 1;
     ultimaPartida = getRodada()+1;
@@ -194,9 +193,11 @@ void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALL
     ALLEGRO_BITMAP * botaoMenu2 = al_load_bitmap("./img/voltaMenu2.jpg");
 
     ALLEGRO_BITMAP * prox1 = al_load_bitmap("./img/prox1.jpg");
+    ALLEGRO_BITMAP * prox2 = al_load_bitmap("./img/prox2.jpg");
     ALLEGRO_BITMAP * ant1 = al_load_bitmap("./img/ant1.jpg");
+    ALLEGRO_BITMAP * ant2 = al_load_bitmap("./img/ant2.jpg");
 
-    if(parte>0&&parte<4){
+    if(parte>0&&parte<5){
         snprintf(nomeArquivo, 20, "ajuda%d.txt", parte);
         file = fopen(nomeArquivo, "r");
         char tLinha[100][100];
@@ -233,12 +234,12 @@ void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALL
             if(apertouMenu){
                 segueTela=0;
             }
-            criaBt(&event, 650, 660, 200, 150, prox1, prox1, &apertouProx, &inbtProx);
+            criaBt(&event, 650, 660, 200, 150, prox1, prox2, &apertouProx, &inbtProx);
             if(apertouProx){
                 telaAjuda(display, event_queue, font, continua, parte+1);
                 segueTela=0;
             }
-            criaBt(&event, 0, 660, 200, 150, ant1, ant1, &apertouAnt, &inbtAnt);
+            criaBt(&event, 0, 660, 200, 150, ant1, ant2, &apertouAnt, &inbtAnt);
             if(apertouAnt){
                 telaAjuda(display, event_queue, font, continua, parte-1);
                 segueTela=0;
@@ -249,4 +250,8 @@ void telaAjuda(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, ALL
     al_destroy_bitmap(bgMenu);
     al_destroy_bitmap(botaoMenu1);
     al_destroy_bitmap(botaoMenu2);
+    al_destroy_bitmap(prox1);
+    al_destroy_bitmap(prox2);
+    al_destroy_bitmap(ant1);
+    al_destroy_bitmap(ant2);
 }

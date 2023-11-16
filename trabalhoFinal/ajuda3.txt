@@ -2,8 +2,8 @@
 percorrer um circuito interno ou externo em 
 torno de pelo menos um dos oito cantos do 
 tabuleiro, seguido de pousar em uma peça 
-adversária, capturando-a. 
-    As peças capturadas são removidas do jogo.
+adversária, capturando-a. As peças capturadas 
+são removidas do jogo.
 
     Assim, para capturar uma peça adversária, 
 é necessário mover a sua e colocá-la no lugar 

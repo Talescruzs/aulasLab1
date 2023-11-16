@@ -4,3 +4,9 @@ tipo:2
 vencedor:2
 tempo:36
 
+partida:2
+rodada:33
+tipo:2
+vencedor:2
+tempo:31
+

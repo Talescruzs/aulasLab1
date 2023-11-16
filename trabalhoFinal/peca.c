@@ -180,3 +180,83 @@ int computador(struct Posicao posicoes[6][6], int *rodada){
     }
     return 1;
 }
+int dicaAtaque(struct Posicao posicoes[6][6], int *rodada){
+    int atacou = 0, tipo=0;
+    if(*rodada%2==1)
+    tipo=1;
+    else
+    tipo=2;
+    for(int v=0; v<6; v++){
+        for(int k=0; k<6; k++){
+            if(posicoes[k][v].estado==tipo && atacou==0){
+                selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
+                localizaPeca(posicoes);
+
+                for(int i=0; i<6; i++){
+                    for(int j=0; j<6; j++){
+                        if(posicoes[i][j].opcao==1){
+                            if(posicoes[i][j].estado==0){
+                                posicoes[i][j].opcao=0;
+                            }
+                            else{
+                                atacou++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(atacou>=1)
+    return 1;
+    else
+    return 0;
+}
+int dicaMovimento(struct Posicao posicoes[6][6], int *rodada){
+    int moveu=0, tipo=0;
+    if(*rodada%2==1)
+    tipo=1;
+    else
+    tipo=2;
+    for(int v=5; v>=0; v--){
+        for(int k=0; k<6; k++){
+            if(posicoes[k][v].estado==tipo && moveu==0){
+                selecionaPeca(posicoes[k][v].posX, posicoes[k][v].posY, posicoes, rodada);
+                localizaPeca(posicoes);
+                
+                for(int i=0; i<6; i++){
+                    for(int j=0; j<6; j++){
+                        if(posicoes[i][j].opcao==1){
+                            // movePeca(posicoes[i][j].posX, posicoes[i][j].posY, posicoes, rodada);
+                            if(((j>v && v<=3)||(j<v && v>3)) && ((i>k && k<=3)||(i<k && k>3)) && moveu==0){
+                                moveu++;
+                            }
+                            else{
+                                posicoes[i][j].opcao=0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(moveu>=1)
+    return 1;
+    else
+    return 0;
+}
+
+int dica(struct Posicao posicoes[6][6], int*qtdDica, int tipo, int*rodada){
+    if(*qtdDica<2){
+        int a = 0;
+        if(tipo==2){
+            a = dicaAtaque(posicoes, rodada);
+        }
+        if(a==0){
+            a = dicaMovimento(posicoes, rodada);
+        }
+        *qtdDica=*qtdDica+1;
+        return 1;
+    }
+    return 0;
+}
