@@ -1,24 +1,6 @@
 partida:1
-rodada:39
+rodada:35
 tipo:2
 vencedor:2
-tempo:36
-
-partida:2
-rodada:33
-tipo:2
-vencedor:2
-tempo:31
-
-partida:3
-rodada:42
-tipo:1
-vencedor:1
-tempo:73
-
-partida:4
-rodada:38
-tipo:2
-vencedor:1
-tempo:122
+tempo:14
 

@@ -7,5 +7,6 @@
 
 void criaBt(ALLEGRO_EVENT *event, int posX, int posY, int tamX, int tamY, ALLEGRO_BITMAP * img1, ALLEGRO_BITMAP * img2, int *apertou, int *inbt);
 int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue);
+void continuaMenu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, int *tipo, int *rodada, int *dica1, int *dica2);
 
 #endif

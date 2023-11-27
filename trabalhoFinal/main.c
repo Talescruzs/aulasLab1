@@ -14,6 +14,7 @@ int main (){
   int linhas = 6;
   int colunas = 6;
   int rodada=1;
+  int dica1=0,dica2=0;
   int tipo=0;
 
   struct Posicao posicoes[linhas][colunas];
@@ -43,7 +44,10 @@ int main (){
   int64_t tempo=0;
 
   while(continua==1){
-    if(tipo==0){
+    if(tipo==3){
+      salvo(posicoes, &rodada, &tipo, font, &tempo, &dica1, &dica2);
+    }
+    else{
       for(i=0; i<colunas; i++){
         for(j=0; j<linhas; j++){
         struct Posicao posicao = {140+(i*76), 150+(j*85), 0, 0, 0};
@@ -58,14 +62,17 @@ int main (){
     }
     if(tipo==0){
       rodada=1;
+      dica1=0;
+      dica2=0;
+      tempo=0;
       tipo = menu(display, event_queue);
     }
     if(tipo==1 || tipo==2){
-      continua = partida(display, event_queue, posicoes, &rodada, font, &tempo, tipo);
-      tipo=0;
-    }
-    else if(tipo==3){
-      salvo(posicoes, &rodada, &tipo, font, &tempo);
+      continua = partida(display, event_queue, posicoes, &rodada, font, &tempo, &tipo, &dica1, &dica2);
+      if(continua==2){
+        continuaMenu(display, event_queue, &tipo, &rodada, &dica1, &dica2);
+        continua=1;
+      }
     }
     else if(tipo==4){
       getHistorico(display, event_queue, font, &continua);

@@ -48,13 +48,15 @@ int getRodada(){
     fclose(file);
     return result;
 }
-void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo, int64_t tempo){
+void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo, int64_t tempo, int *dica1, int *dica2){
     FILE *file;
     file = fopen("save.txt", "w");
     fprintf(file, "partida{\n");
     fprintf(file, "rodada:%d\n", *rodada);
     fprintf(file, "tipo:%d\n", tipo);
     fprintf(file, "tempo:%ld\n", tempo);
+    fprintf(file, "dica1:%d\n", *dica1);
+    fprintf(file, "dica2:%d\n", *dica2);
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
             fprintf(file, "%dX%d{\n", i, j);
@@ -67,7 +69,7 @@ void salvaPartida(struct Posicao posicoes[6][6], int *rodada, int tipo, int64_t 
     fprintf(file, "}");
     fclose(file);
 }
-int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int tipo, int * result, int *inbtMenu, int *inbtSalvar, int *inbtDica, ALLEGRO_TIMER* timer, int*qtdDica){
+int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6], int *rodada, int *tipo, int * result, int *inbtMenu, int *inbtSalvar, int *inbtDica, ALLEGRO_TIMER* timer, int*qtdDica, int*qtdDicaOutro){
     ALLEGRO_BITMAP * botaoSalva1 = al_load_bitmap("./img/Salvar1.jpg");
     ALLEGRO_BITMAP * botaoSalva2 = al_load_bitmap("./img/Salvar2.jpg");
     ALLEGRO_BITMAP * botaoMenu1 = al_load_bitmap("./img/voltaMenu1.jpg");
@@ -103,16 +105,17 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
         al_draw_bitmap(barra, 600, 0, 0);
         criaBt(event, 625, 100, 150, 150, botaoSalva1, botaoSalva2, &apertouSalva, inbtSalvar);
         if(apertouSalva==1){
-            salvaPartida(posicoes, rodada, tipo, al_get_timer_count(timer)/30);
+            salvaPartida(posicoes, rodada, *tipo, al_get_timer_count(timer)/30, qtdDica, qtdDicaOutro);
         }
         criaBt(event, 625, 300, 150, 150, botaoMenu1, botaoMenu2, &apertouVoltaMenu, inbtMenu);
         if(apertouVoltaMenu==1){
             *result = 1;
+            *tipo = 0;
             return -1;
         }
         criaBt(event, 625, 500, 150, 150, botaoDica1, botaoDica2, &apertouDica, inbtDica);
         if(apertouDica==1){
-            deuDica = dica(posicoes, qtdDica, tipo, rodada);
+            deuDica = dica(posicoes, qtdDica, *tipo, rodada);
         }
     }
     if( event->type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
@@ -141,7 +144,7 @@ int menuLateral(ALLEGRO_EVENT *event, int *inMenu, struct Posicao posicoes[6][6]
 
     return 0;
 }
-int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font, int64_t *time, int tipo){
+int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct Posicao posicoes[6][6], int *rodada, ALLEGRO_FONT* font, int64_t *time, int *tipo, int *dica1, int *dica2){
     int linhas = 6;
     int colunas = 6;
     int i, j;
@@ -153,7 +156,6 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
     char tempoStr[15];
     char qtdDicaStr[15];
     int continua=1;
-    int qtdDica1=0, qtdDica2=0;
     int deuDica=0, testeDica=0;
     int lado =0;
 
@@ -181,7 +183,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
         }
         ALLEGRO_EVENT event;
         al_wait_for_event(event_queue, &event);
-        if(tipo==1){
+        if(*tipo==1){
             if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
                 break;
             }
@@ -197,7 +199,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
             if(*rodada%2==0){
                 continua = computador(posicoes, rodada);
                 if(continua==0){
-                    addHistorico(rodada, 0, tipo, tempo);
+                    addHistorico(rodada, 0, *tipo, tempo);
                     result = 1;
                     break; 
                 }
@@ -238,35 +240,35 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
             }
         }
         if(qtd1==0||qtd2==0){
-            result = 1;
+            result = 2;
             if(qtd1==0){
-                addHistorico(rodada, 2, tipo, tempo);                
+                addHistorico(rodada, 2, *tipo, tempo);                
             }
             else{
-                addHistorico(rodada, 1, tipo, tempo);                
+                addHistorico(rodada, 1, *tipo, tempo);                
             }
             break;
         }
         
 
-        if(tipo==1){
+        if(*tipo==1){
             if(*rodada%2==1){
-                testeDica = qtdDica1;
-                menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, &qtdDica1);
-                if(testeDica!=qtdDica1){
+                testeDica = *dica1;
+                menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, dica1, dica2);
+                if(testeDica!=*dica1){
                     deuDica=1;
                 }
             }
             else{
-                testeDica = qtdDica2;
-                menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, &qtdDica2);
-                if(testeDica!=qtdDica2){
+                testeDica = *dica2;
+                menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, dica2, dica1);
+                if(testeDica!=*dica2){
                     deuDica=1;
                 }
             }
-            snprintf(qtdDicaStr, 15, "Dicas 1: %d", qtdDica1);
+            snprintf(qtdDicaStr, 15, "Dicas 1: %d", *dica1);
             al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, qtdDicaStr);
-            snprintf(qtdDicaStr, 15, "Dicas 2: %d", qtdDica2);
+            snprintf(qtdDicaStr, 15, "Dicas 2: %d", *dica2);
             al_draw_text(font, al_map_rgb(0, 0, 0), 670, 50, 0, qtdDicaStr);
             snprintf(rodadaStr, 15, "Rodada %d", *rodada);
             snprintf(tempoStr, 15, "Tempo: %ld", tempo);
@@ -274,12 +276,12 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
             al_draw_text(font, al_map_rgb(0, 0, 0), 670, 740, 0, tempoStr);
         }
         else{
-            testeDica = qtdDica1;
-            menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, &qtdDica1);
-            if(testeDica!=qtdDica1){
+            testeDica = *dica1;
+            menuInput = menuLateral(&event, &inMenu, posicoes, rodada, tipo, &result, &inbtMenu, &inbtSalvar, &inbtDica, timer, dica1, dica2);
+            if(testeDica!=*dica1){
                 deuDica=1;
             }
-            snprintf(qtdDicaStr, 15, "Dicas: %d", qtdDica1);
+            snprintf(qtdDicaStr, 15, "Dicas: %d", *dica1);
             al_draw_text(font, al_map_rgb(0, 0, 0), 670, 20, 0, qtdDicaStr);
             snprintf(rodadaStr, 15, "Rodada %d", *rodada);
             snprintf(tempoStr, 15, "Tempo: %ld", tempo);
@@ -298,7 +300,7 @@ int partida(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, struct
 
     return result;
 }
-void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo, ALLEGRO_FONT* font, int64_t *tempo){
+void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo, ALLEGRO_FONT* font, int64_t *tempo, int *dica1, int *dica2){
     FILE *file;
     file = fopen("save.txt", "r");
 
@@ -353,6 +355,30 @@ void salvo(struct Posicao posicoes[6][6], int *rodada, int *tipo, ALLEGRO_FONT* 
                 }
                 long result = strtol(realDado, &teste, 10);
                 *tempo = (int64_t)result;
+            }
+            else if(strcmp(realDado, "dica1")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                *dica1 = (int64_t)result;
+            }
+            else if(strcmp(realDado, "dica2")==0){
+                for(i=tam+1; tLinha[i]!='\0'; i++){
+                    dado[count]=tLinha[i];
+                    count++;
+                }
+                char realDado[count];
+                for(i=0; i<count; i++){
+                    realDado[i]=dado[i];
+                }
+                long result = strtol(realDado, &teste, 10);
+                *dica2 = (int64_t)result;
             }
             else if(strcmp(realDado, "estado")==0){
                 for(i=tam+1; tLinha[i]!='\0'; i++){

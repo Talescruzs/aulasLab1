@@ -101,3 +101,47 @@ int menu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue){
 
     return inMenu;
 }
+void continuaMenu(ALLEGRO_DISPLAY * display, ALLEGRO_EVENT_QUEUE * event_queue, int *tipo, int *rodada, int *dica1, int *dica2){
+    ALLEGRO_BITMAP * bgMenu = al_load_bitmap("./img/menuFim.jpg");
+    ALLEGRO_BITMAP * menu1 = al_load_bitmap("./img/escolheMenu1.jpg");
+    ALLEGRO_BITMAP * menu2 = al_load_bitmap("./img/escolheMenu2.jpg");
+    ALLEGRO_BITMAP * novamente1 = al_load_bitmap("./img/jogarNovamente1.jpg");
+    ALLEGRO_BITMAP * novamente2 = al_load_bitmap("./img/jogarNovamente2.jpg");
+
+    int inbtMenu=0, apertouMenu=0;
+    int inbtNovamente=0, apertouNovamente=0;
+    int inMenu=1;
+
+    while(inMenu==1){
+        ALLEGRO_EVENT event;
+        al_wait_for_event(event_queue, &event);
+        al_clear_to_color(al_map_rgb(255,255,255));
+        al_draw_bitmap(bgMenu, 0, 0, 0);
+        criaBt(&event, 100, 400, 300, 150, menu1, menu2, &apertouMenu, &inbtMenu);
+        criaBt(&event, 500, 400, 300, 150, novamente1, novamente2, &apertouNovamente, &inbtNovamente);
+
+        if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+            *tipo = -1;
+            inMenu = 0;
+        }
+        if(apertouMenu){
+            *tipo=0;
+            inMenu = 0;
+        }
+        else if(apertouNovamente){
+            inMenu = 0;
+            *rodada = 1;
+            *dica1 = 0;
+            *dica2 = 0;
+        }
+
+        al_flip_display();
+    }
+
+    al_destroy_bitmap(bgMenu);
+    al_destroy_bitmap(menu1);
+    al_destroy_bitmap(menu2);
+    al_destroy_bitmap(novamente1);
+    al_destroy_bitmap(novamente2);
+
+}
